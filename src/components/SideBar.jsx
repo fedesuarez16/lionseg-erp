@@ -1,6 +1,5 @@
 // Sidebar.js
 import React, { useState } from 'react';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import logo from './logo.png'; // Importa tu logo aquí
 import { Link } from 'react-router-dom'; // Import Link
 
@@ -49,7 +48,6 @@ const Sidebar = () => {
         className="bg-white text-black hover:bg-gray-700 p-2 rounded"
         onClick={handleSidebarToggle}
       >
-        {isSidebarOpen ? <FaAngleLeft /> : <FaAngleRight />}
       </button>
     </div>
   );
