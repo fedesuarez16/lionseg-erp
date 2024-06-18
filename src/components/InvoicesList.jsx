@@ -8,7 +8,7 @@ const InvoiceList = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/clientes') 
+    axios.get('https://localhost:3000/api/clientes') 
       .then((response) => {
         const allInvoices = [];
         
