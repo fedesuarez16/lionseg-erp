@@ -8,7 +8,7 @@ const InvoiceList = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('https://https://lionseg-df2520243ed6.herokuapp.com/api/clientes') 
+    axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/clientes') 
       .then((response) => {
         const allInvoices = [];
         
