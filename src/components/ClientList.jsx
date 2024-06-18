@@ -15,7 +15,7 @@ const ClientList = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await axios.get(`http://lionseg-back.herokuapp.com/api/clientes?search=${searchQuery}`);
+        const response = await axios.get(`https://lionseg-back.herokuapp.com/api/clientes?search=${searchQuery}`);
         const sortedClients = response.data.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
         setClients(sortedClients);
         setLoading(false);
@@ -38,7 +38,7 @@ const ClientList = () => {
 
   const handleStateChange = async (clientId, newState) => {
     try {
-      const response = await axios.put(`http://lionseg-back.herokuapp.com/api/clientes/${clientId}`, { state: newState });
+      const response = await axios.put(`https://lionseg-back.herokuapp.com/api/clientes/${clientId}`, { state: newState });
       if (response.status === 200) {
         setClients(clients.map(client => client._id === clientId ? response.data : client));
       }
