@@ -9,7 +9,7 @@ const GeneradorFacturas = () => {
 
   const generarFacturas = async () => {
     try {
-      const response = await axios.post('https://lionseg-back.herokuapp.com/api/generar-facturas');
+      const response = await axios.post('https://https://lionseg-df2520243ed6.herokuapp.com/api/generar-facturas');
       if (response.status === 200) {
         fetchFacturas(); // Después de generar las facturas, actualiza la lista de facturas
         setError('');
@@ -24,7 +24,7 @@ const GeneradorFacturas = () => {
 
   const fetchFacturas = async () => {
     try {
-      const response = await axios.get('https://lionseg-back.herokuapp.com/api/clientes');
+      const response = await axios.get('https://https://lionseg-df2520243ed6.herokuapp.com/api/clientes');
       if (response.status === 200) {
         // Aplanar la estructura de datos
         const facturasAplanadas = response.data.flatMap(cliente => 
@@ -48,7 +48,7 @@ const GeneradorFacturas = () => {
 
   const updateInvoiceLinkState = async (invoiceLinkId, newState) => {
     try {
-      const response = await axios.put(`https://lionseg-back.herokuapp.com/api/invoiceLinks/${invoiceLinkId}/state`, {
+      const response = await axios.put(`https://https://lionseg-df2520243ed6.herokuapp.com/api/invoiceLinks/${invoiceLinkId}/state`, {
         state: newState,
       });
 
@@ -118,7 +118,7 @@ const GeneradorFacturas = () => {
               filterAndSortFacturas(facturas).map(invoiceLink => (
                 <tr key={invoiceLink._id}>
                   <td className="border p-2">
-                    <a href={`https://lionseg-back.herokuapp.com/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
+                    <a href={`https://https://lionseg-df2520243ed6.herokuapp.com/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
                       {invoiceLink.fileName}
                     </a>
                   </td>

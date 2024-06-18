@@ -25,7 +25,7 @@ const GenerateInvoice = () => {
 
   const handleGenerateInvoice = () => {
     // Make a POST request to generate the invoice
-    axios.post(`https://lionseg-back.herokuapp.com/api/clientes/${clientId}/invoices`, formData)
+    axios.post(`https://https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`, formData)
       .then((response) => {
         // Handle the response as needed
         console.log('Invoice generated successfully:', response.data);

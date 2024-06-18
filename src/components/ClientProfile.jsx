@@ -20,7 +20,7 @@ const ClientProfile = () => {
   });
 
   useEffect(() => {
-    axios.get(`https://lionseg-back.herokuapp.com/api/clientes/${clientId}`)
+    axios.get(`https://https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`)
       .then((response) => {
         setClient(response.data);
         setFormData(response.data);
@@ -64,7 +64,7 @@ const ClientProfile = () => {
   };
 
   const handleFormSubmit = () => {
-    axios.put(`https://lionseg-back.herokuapp.com/api/clientes/${clientId}`, formData)
+    axios.put(`https://https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`, formData)
       .then((response) => {
         setClient(response.data);
         setIsEditing(false);
@@ -76,7 +76,7 @@ const ClientProfile = () => {
   };
 
   const handleDeleteClient = () => {
-    axios.delete(`https://lionseg-back.herokuapp.com/api/clientes/${clientId}`)
+    axios.delete(`https://https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`)
       .then(() => {
         navigate('/clients');
       })

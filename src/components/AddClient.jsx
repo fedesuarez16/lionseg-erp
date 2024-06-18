@@ -53,7 +53,7 @@ const AddClient = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://lionseg-back.herokuapp.com/api/clientes', formData);
+      const response = await axios.post('https://https://lionseg-df2520243ed6.herokuapp.com/api/clientes', formData);
 
       console.log('Client added:', response.data);
       // Clear the form or show a success message
