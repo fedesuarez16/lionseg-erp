@@ -87,7 +87,8 @@ const GeneradorFacturas = () => {
     <div>
       <div className="bg-gray-100 min-h-screen h-auto">
         <Navbar />
-      
+
+        <table className="min-w-full bg-white rounded border border-collapse ">
         <div className="p-4 h-12">
           <label htmlFor="filter">Filtrar por estado: </label>
           <select id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
@@ -96,8 +97,6 @@ const GeneradorFacturas = () => {
             <option value="unpaid">Impagas</option>
           </select>
         </div>
-
-        <table className="min-w-full bg-white rounded border border-collapse border-gray-800">
           <thead>
             <tr className="bg-gray-300 text-black">
               <th className="border p-2 rounded">Invoice Link</th>
@@ -145,9 +144,14 @@ const GeneradorFacturas = () => {
         </table>
       </div>
 
-      <h1>Generador de Facturas</h1>
-      <button onClick={generarFacturas}>Generar Facturas</button>
-      {error && <p>{error}</p>}
+      {error && <p className="text-red-500 m-4">{error}</p>}
+
+      <button
+        onClick={generarFacturas}
+        className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+      >
+        Generar Facturas
+      </button>
     </div>
   );
 };

@@ -292,13 +292,13 @@ const ClientProfile = () => {
 
           <button
         onClick={handleEditToggle}
-        className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+        className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
       >
         {isEditing ? 'Cancelar' : 'Editar'}
       </button>
       <button
         onClick={handleDeleteClient}
-        className="fixed bottom-4 right-24 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        className="fixed bottom-4 right-24 bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
       >
         Eliminar
       </button>
