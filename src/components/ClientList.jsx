@@ -89,7 +89,7 @@ const ClientList = () => {
       </table>
 
       <button
-        className="fixed bottom-4 right-4 pb-[14px] bg-gray-800 text-white py-2 px-[18px] rounded-full text-3xl"
+        className="fixed bottom-4 right-6 pb-[14px] bg-gray-800 text-white py-2 px-[18px] rounded-full text-3xl"
         onClick={handleAddClientToggle}
       > +
       </button>
