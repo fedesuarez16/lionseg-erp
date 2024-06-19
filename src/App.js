@@ -13,7 +13,7 @@ function App() {
         {/* Sidebar */}
         <Sidebar />
         {/* Main content */}
-        <main className="flex-1 p-4 bg-gray-200">
+        <main className="flex-1  bg-gray-200">
           <Routes>
             <Route path="/clients" element={<ClientList />} />
             <Route path="/clients/:clientId" element={<ClientProfile />} />
