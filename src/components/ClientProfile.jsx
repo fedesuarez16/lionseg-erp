@@ -230,52 +230,67 @@ const ClientProfile = () => {
               <p className="font-semibold">Email:</p>
               <p className="w-auto bg-white mb-2 p-2 rounded">{client.email}</p>
               <p className="font-semibold">Teléfono:</p>
-              <p className="w-auto bg-white mb-2 p-2 rounded">{client.phoneNumber}</p>
+              <p className="w-auto bg-white p-2 rounded">{client.phoneNumber}</p>
+            </div>
+            <div className="w-1/2 p-4">
+              <p className="font-semibold">Fecha de creación:</p>
+              <p className="w-auto bg-white mb-2 p-2 rounded">{new Date(client.creationDate).toLocaleDateString()}</p>
+              <p className="font-semibold">Estado del cliente:</p>
+              <p className="w-auto bg-white mb-2 p-2 rounded">{client.state}</p>
             </div>
           </div>
-          <div className="tabs">
-            <button
-              className={`tab ${activeTab === 'services' ? 'active' : ''}`}
-              onClick={() => handleTabChange('services')}
-            >
-              Servicios
-            </button>
-            <button
-              className={`tab ${activeTab === 'invoices' ? 'active' : ''}`}
-              onClick={() => handleTabChange('invoices')}
-            >
-              Facturas
-            </button>
-          </div>
-          {activeTab === 'services' && (
-            <div>
-              {client.services.map((service, index) => (
-                <div key={index} className="p-4 mb-4 bg-white rounded shadow">
-                  <h2 className="text-xl font-bold mb-2">{service.producto}</h2>
-                  <p><strong>Precio:</strong> ${service.price}</p>
-                  <p><strong>Ciclo de facturación:</strong> {service.invoiceCycle}</p>
-                  <p><strong>Método de pago:</strong> {service.paymentMethod}</p>
-                  <p><strong>Dominios:</strong> {service.domains.join(', ')}</p>
-                </div>
-              ))}
-            </div>
-          )}
-          {activeTab === 'invoices' && (
-            <div>
-              {client.invoiceLinks.map((invoiceLink, index) => (
-                <div key={index} className="p-4 mb-4 bg-white rounded shadow">
-                  <h2 className="text-xl font-bold mb-2">{invoiceLink.fileName}</h2>
-                  <p><strong>Fecha de registro:</strong> {new Date(invoiceLink.registrationDate).toLocaleDateString()}</p>
-                  <p><strong>Fecha de expiración:</strong> {new Date(invoiceLink.expirationDate).toLocaleDateString()}</p>
-                  <p><strong>Estado:</strong> {invoiceLink.state}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
-      <button
+          <div className="w-full mb-4">
+            <h2 className="text-xl font-bold mb-2">Servicios</h2>
+            <table className="min-w-full border border-collapse border-gray-800">
+              <thead>
+                <tr className="bg-gray-800 text-white">
+                  <th className="border p-2">Producto</th>
+                  <th className="border p-2">Precio</th>
+                  <th className="border p-2">Ciclo de facturación</th>
+                  <th className="border p-2">Método de pago</th>
+                  <th className="border p-2">Dominios</th>
+                </tr>
+              </thead>
+              <tbody>
+                {client.services.map((service, index) => (
+                  <tr key={index}>
+                    <td className="border bg-white p-2">{service.producto}</td>
+                    <td className="border bg-white p-2">{service.price}</td>
+                    <td className="border bg-white p-2">{service.invoiceCycle}</td>
+                    <td className="border bg-white p-2">{service.paymentMethod}</td>
+                    <td className="border bg-white p-2">{service.domains.join(', ')}</td>
+                  </tr>
+                ))} 
+              </tbody>
+            </table>
+          </div>
+
+          <p className="font-semibold">Info de facturación:</p>
+          <div className="w-full mb-4">
+            <table className="min-w-full border border-collapse border-gray-800">
+              <thead>
+                <tr className="bg-gray-800 text-white">
+                  <th className="border p-2">Número de factura</th>
+                  <th className="border p-2">Fecha de registro</th>
+                  <th className="border p-2">Fecha de expiración</th>
+                  <th className="border p-2">Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {client.invoiceLinks.map((invoiceLink, index) => (
+                  <tr key={index}>
+                    <td className="border bg-white p-2">{invoiceLink.fileName}</td>
+                    <td className="border bg-white p-2">{new Date(invoiceLink.registrationDate).toLocaleDateString()}</td>
+                    <td className="border bg-white p-2">{new Date(invoiceLink.expirationDate).toLocaleDateString()}</td>
+                    <td className="border bg-white p-2">{invoiceLink.state}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <button
         onClick={handleEditToggle}
         className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
       >
@@ -287,6 +302,8 @@ const ClientProfile = () => {
       >
         Eliminar Cliente
       </button>
+        </div>
+      )}
     </div>
   );
 };
