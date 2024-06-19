@@ -85,7 +85,7 @@ const GeneradorFacturas = () => {
 
   return (
     <div>
-      <div className="bg-gray-100 h-auto">
+      <div className="bg-gray-100 min-h-screen h-auto">
         <Navbar />
       
         <div className="p-4 h-12">
