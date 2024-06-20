@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddClient = () => {
+const AddClient = ({ onClientAdded }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -56,10 +56,26 @@ const AddClient = () => {
       const response = await axios.post('https://lionseg-df2520243ed6.herokuapp.com/api/clientes', formData);
 
       console.log('Client added:', response.data);
-      // Clear the form or show a success message
+      onClientAdded(); // Notificar a ClientList que un cliente ha sido agregado
+      setFormData({
+        name: '',
+        email: '',
+        phoneNumber: '',
+        services: [
+          {
+            producto: '',
+            firstPaymentAmount: '',
+            price: '',
+            invoiceCycle: '',
+            paymentMethod: '',
+            domains: '',
+          },
+        ],
+        creationDate: new Date().toISOString().slice(0, 10),
+        state: 'activo',
+      });
     } catch (error) {
       console.error('Error adding client:', error);
-      // Handle the error, e.g., show an error message
     }
   };
 
@@ -112,7 +128,6 @@ const AddClient = () => {
                 >
                   <option value="monitoreo">Monitoreo</option>
                   <option value="kit DVR">Kit DVR</option>
-
                 </select>
                 <label className="block text-sm font-medium text-gray-700">Monto del primer pago:</label>
                 <input

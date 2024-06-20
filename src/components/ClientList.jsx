@@ -12,24 +12,29 @@ const ClientList = () => {
   const location = useLocation();
   const searchQuery = new URLSearchParams(location.search).get('search') || '';
 
-  useEffect(() => {
-    const fetchClients = async () => {
-      try {
-        const response = await axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes?search=${searchQuery}`);
-        const sortedClients = response.data.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
-        setClients(sortedClients);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching clients:', error);
-        setLoading(false);
-      }
-    };
+  const fetchClients = async () => {
+    try {
+      const response = await axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes?search=${searchQuery}`);
+      const sortedClients = response.data.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
+      setClients(sortedClients);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching clients:', error);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchClients();
   }, [searchQuery]);
 
   const handleAddClientToggle = () => {
     setIsAddClientVisible(!isAddClientVisible);
+  };
+
+  const handleClientAdded = () => {
+    fetchClients();
+    setIsAddClientVisible(false);
   };
 
   const handleSearch = (searchQuery) => {
@@ -60,9 +65,8 @@ const ClientList = () => {
       > +
       </button>
 
-      {isAddClientVisible && <AddClient />}
+      {isAddClientVisible && <AddClient onClientAdded={handleClientAdded} />}
       <table className="min-w-full bg-white rounded border border-collapse border-gray-800">
-      
         <thead>
           <tr className="bg-gray-300">
             <th className="border p-2 rounded">Name</th>
@@ -95,8 +99,6 @@ const ClientList = () => {
           ))}
         </tbody>
       </table>
-
-      
     </div>
   );
 };
