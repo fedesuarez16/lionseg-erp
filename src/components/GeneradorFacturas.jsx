@@ -92,16 +92,11 @@ const GeneradorFacturas = () => {
         <table className="min-w-full bg-white rounded border border-collapse ">
         <div className="p-4 h-12">
           <label htmlFor="filter">Filtrar por estado: </label>
-          <select
-            value={invoiceLink.state}
-            onChange={(e) => updateInvoiceLinkState(clienteId, invoiceLink._id, e.target.value)}
-            className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
-          >
-            <option value="pending">Pending</option>
-            <option value="paid">Paid</option>
-            <option value="overdue">Overdue</option>
+          <select id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
+            <option value="all">Todas</option>
+            <option value="paid">Pagadas</option>
+            <option value="unpaid">Impagas</option>
           </select>
-
         </div>
           <thead>
             <tr className="bg-gray-300 text-black">
@@ -133,15 +128,16 @@ const GeneradorFacturas = () => {
                   <td className="border p-2">{invoiceLink.total.toFixed(2)}</td>
                   <td className="border p-2">{invoiceLink.paymentMethods || 'N/A'}</td>
                   <td className="border p-2">
-                    <select
-                      value={invoiceLink.state}
-                      onChange={(e) => updateInvoiceLinkState(invoiceLink._id, e.target.value)}
-                      className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="paid">Paid</option>
-                      <option value="overdue">Overdue</option>
-                    </select>
+                  <select
+                    value={invoiceLink.state}
+                    onChange={(e) => updateInvoiceLinkState(clienteId, invoiceLink._id, e.target.value)}
+                    className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="overdue">Overdue</option>
+                  </select>
+
                   </td>
                 </tr>
               ))
