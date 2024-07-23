@@ -30,6 +30,7 @@ const GeneradorFacturas = () => {
         const facturasAplanadas = response.data.flatMap(cliente => 
           cliente.invoiceLinks.map(invoiceLink => ({
             ...invoiceLink,
+            clienteId: cliente._id, // Asegúrate de incluir clienteId aquí
             clienteName: cliente.name,
             total: cliente.services.reduce((acc, service) => acc + (service.price || 0), 0),
             paymentMethods: cliente.services.map(service => service.paymentMethod).filter(Boolean).join(', '),
@@ -130,13 +131,14 @@ const GeneradorFacturas = () => {
                   <td className="border p-2">
                   <select
                     value={invoiceLink.state}
-                    onChange={(e) => updateInvoiceLinkState(invoiceLink._id, e.target.value)}
+                    onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
                     className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
                   >
                     <option value="pending">Pending</option>
                     <option value="paid">Paid</option>
                     <option value="overdue">Overdue</option>
                   </select>
+
 
                   </td>
                 </tr>
