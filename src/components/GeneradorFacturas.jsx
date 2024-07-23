@@ -30,13 +30,11 @@ const GeneradorFacturas = () => {
         const facturasAplanadas = response.data.flatMap(cliente => 
           cliente.invoiceLinks.map(invoiceLink => ({
             ...invoiceLink,
-            clienteId: cliente._id, // Añade el clienteId aquí
             clienteName: cliente.name,
             total: cliente.services.reduce((acc, service) => acc + (service.price || 0), 0),
             paymentMethods: cliente.services.map(service => service.paymentMethod).filter(Boolean).join(', '),
           }))
         );
-        
         setFacturas(facturasAplanadas);
         setError('');
       } else {
@@ -48,12 +46,12 @@ const GeneradorFacturas = () => {
     }
   };
 
-  const updateInvoiceLinkState = async (invoiceLinkId, newState) => {
+  const updateInvoiceLinkState = async (clienteId, invoiceLinkId, newState) => {
     try {
       const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clienteId}/invoiceLinks/${invoiceLinkId}/state`, {
         state: newState,
       });
-
+  
       if (response.status === 200) {
         fetchFacturas(); // Refresh the list after updating the state
         setError('');
@@ -65,6 +63,7 @@ const GeneradorFacturas = () => {
       setError('Error al actualizar el estado de la factura');
     }
   };
+  
 
   const filterAndSortFacturas = (facturas) => {
     // Filtrar
@@ -93,11 +92,16 @@ const GeneradorFacturas = () => {
         <table className="min-w-full bg-white rounded border border-collapse ">
         <div className="p-4 h-12">
           <label htmlFor="filter">Filtrar por estado: </label>
-          <select id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">Todas</option>
-            <option value="paid">Pagadas</option>
-            <option value="unpaid">Impagas</option>
+          <select
+            value={invoiceLink.state}
+            onChange={(e) => updateInvoiceLinkState(clienteId, invoiceLink._id, e.target.value)}
+            className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
+          >
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+            <option value="overdue">Overdue</option>
           </select>
+
         </div>
           <thead>
             <tr className="bg-gray-300 text-black">
@@ -129,16 +133,15 @@ const GeneradorFacturas = () => {
                   <td className="border p-2">{invoiceLink.total.toFixed(2)}</td>
                   <td className="border p-2">{invoiceLink.paymentMethods || 'N/A'}</td>
                   <td className="border p-2">
-                  <select
-                    value={invoiceLink.state}
-                    onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
-                    className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="paid">Paid</option>
-                    <option value="overdue">Overdue</option>
-                  </select>
-
+                    <select
+                      value={invoiceLink.state}
+                      onChange={(e) => updateInvoiceLinkState(invoiceLink._id, e.target.value)}
+                      className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="paid">Paid</option>
+                      <option value="overdue">Overdue</option>
+                    </select>
                   </td>
                 </tr>
               ))
