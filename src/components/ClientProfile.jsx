@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom'; // Importar Link
 import axios from 'axios';
 import Navbar from './Navbar';
 
@@ -10,7 +10,6 @@ const ClientProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState('services'); // Default active tab is 'services'
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -280,7 +279,11 @@ const ClientProfile = () => {
               <tbody>
                 {client.invoiceLinks.map((invoiceLink, index) => (
                   <tr key={index}>
-                    <td className="border bg-white p-2">{invoiceLink.fileName}</td>
+                    <td className="border bg-white p-2">
+                      <Link to={`/facturas/${invoiceLink.id}`} className="text-blue-500 hover:underline">
+                        {invoiceLink.fileName}
+                      </Link>
+                    </td>
                     <td className="border bg-white p-2">{new Date(invoiceLink.registrationDate).toLocaleDateString()}</td>
                     <td className="border bg-white p-2">{new Date(invoiceLink.expirationDate).toLocaleDateString()}</td>
                     <td className="border bg-white p-2">{invoiceLink.state}</td>
@@ -291,17 +294,17 @@ const ClientProfile = () => {
           </div>
 
           <button
-        onClick={handleEditToggle}
-        className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-      >
-        {isEditing ? 'Cancelar' : 'Editar'}
-      </button>
-      <button
-        onClick={handleDeleteClient}
-        className="fixed bottom-4 right-24 bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-      >
-        Eliminar
-      </button>
+            onClick={handleEditToggle}
+            className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            {isEditing ? 'Cancelar' : 'Editar'}
+          </button>
+          <button
+            onClick={handleDeleteClient}
+            className="fixed bottom-4 right-24 bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            Eliminar
+          </button>
         </div>
       )}
     </div>

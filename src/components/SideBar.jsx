@@ -42,7 +42,7 @@ const Sidebar = () => {
             <li>
               <Link to="/facturas" className="block text-white hover:bg-gray-700 p-2 rounded transition-colors duration-300">
                 Lista de Facturas
-              </Link>
+              </Link> 
             </li>
             <li>
               <Link to="/transactions" className="block text-white hover:bg-gray-700 p-2 rounded transition-colors duration-300">
