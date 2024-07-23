@@ -30,11 +30,13 @@ const GeneradorFacturas = () => {
         const facturasAplanadas = response.data.flatMap(cliente => 
           cliente.invoiceLinks.map(invoiceLink => ({
             ...invoiceLink,
+            clienteId: cliente._id, // Añade el clienteId aquí
             clienteName: cliente.name,
             total: cliente.services.reduce((acc, service) => acc + (service.price || 0), 0),
             paymentMethods: cliente.services.map(service => service.paymentMethod).filter(Boolean).join(', '),
           }))
         );
+        
         setFacturas(facturasAplanadas);
         setError('');
       } else {
@@ -127,15 +129,16 @@ const GeneradorFacturas = () => {
                   <td className="border p-2">{invoiceLink.total.toFixed(2)}</td>
                   <td className="border p-2">{invoiceLink.paymentMethods || 'N/A'}</td>
                   <td className="border p-2">
-                    <select
-                      value={invoiceLink.state}
-                      onChange={(e) => updateInvoiceLinkState(invoiceLink._id, e.target.value)}
-                      className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="paid">Paid</option>
-                      <option value="overdue">Overdue</option>
-                    </select>
+                  <select
+                    value={invoiceLink.state}
+                    onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
+                    className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="overdue">Overdue</option>
+                  </select>
+
                   </td>
                 </tr>
               ))
