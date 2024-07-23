@@ -48,7 +48,7 @@ const GeneradorFacturas = () => {
 
   const updateInvoiceLinkState = async (invoiceLinkId, newState) => {
     try {
-      const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/invoiceLinks/${invoiceLinkId}/state`, {
+      const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clienteId}/invoiceLinks/${invoiceLinkId}/state`, {
         state: newState,
       });
 
