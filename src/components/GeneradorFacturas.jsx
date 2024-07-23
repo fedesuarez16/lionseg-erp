@@ -130,7 +130,7 @@ const GeneradorFacturas = () => {
                   <td className="border p-2">
                   <select
                     value={invoiceLink.state}
-                    onChange={(e) => updateInvoiceLinkState(clienteId, invoiceLink._id, e.target.value)}
+                    onChange={(e) => updateInvoiceLinkState(invoiceLink._id, e.target.value)}
                     className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
                   >
                     <option value="pending">Pending</option>
