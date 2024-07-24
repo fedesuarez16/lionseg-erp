@@ -1,10 +1,9 @@
-// NesInvoicw.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const NewInvoice = () => {
   const [clients, setClients] = useState([]);
-  const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedClientId, setSelectedClientId] = useState('');
   const [monto, setMonto] = useState('');
   const [fechaFactura, setFechaFactura] = useState('');
   const [fechaVencimiento, setFechaVencimiento] = useState('');
@@ -26,15 +25,15 @@ const NewInvoice = () => {
   }, []);
 
   const handleGenerateInvoice = async () => {
-    if (!selectedClient) {
+    if (!selectedClientId) {
       setError('Please select a client');
       return;
     }
 
     try {
-      const response = await axios.post(`http://localhost:3000/api/clientes/${selectedClient._id}/generar-factura`, {
+      const response = await axios.post(`http://localhost:3000/api/clientes/${selectedClientId}/generar-factura`, {
         monto,
-        destinatario: selectedClient.name,
+        destinatario: selectedClientId,
         fechaFactura,
         fechaVencimiento,
         descripcion,
@@ -52,7 +51,7 @@ const NewInvoice = () => {
       <h2>Generar Factura</h2>
       <div>
         <label>Seleccionar Cliente:</label>
-        <select onChange={(e) => setSelectedClient(clients.find(client => client._id === e.target.value))}>
+        <select value={selectedClientId} onChange={(e) => setSelectedClientId(e.target.value)}>
           <option value="">--Seleccione un Cliente--</option>
           {clients.map(client => (
             <option key={client._id} value={client._id}>{client.name}</option>
