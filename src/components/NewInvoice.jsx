@@ -1,22 +1,40 @@
-// NewInvoice.js
-import React, { useState } from 'react';
+// NesInvoicw.js
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const NewInvoice = () => {
-  const [clientId, setClientId] = useState('');
+  const [clients, setClients] = useState([]);
+  const [selectedClient, setSelectedClient] = useState(null);
   const [monto, setMonto] = useState('');
-  const [destinatario, setDestinatario] = useState('');
   const [fechaFactura, setFechaFactura] = useState('');
   const [fechaVencimiento, setFechaVencimiento] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    // Fetch clients from the server
+    const fetchClients = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/clientes');
+        setClients(response.data);
+      } catch (err) {
+        console.error('Error fetching clients:', err);
+      }
+    };
+    fetchClients();
+  }, []);
+
   const handleGenerateInvoice = async () => {
+    if (!selectedClient) {
+      setError('Please select a client');
+      return;
+    }
+
     try {
-      const response = await axios.post(`http://localhost:3000/api/clientes/${clientId}/generar-factura`, {
+      const response = await axios.post(`http://localhost:3000/api/clientes/${selectedClient._id}/generar-factura`, {
         monto,
-        destinatario,
+        destinatario: selectedClient.name,
         fechaFactura,
         fechaVencimiento,
         descripcion,
@@ -32,23 +50,20 @@ const NewInvoice = () => {
   return (
     <div>
       <h2>Generar Factura</h2>
-      <input
-        type="text"
-        placeholder="ID del Cliente"
-        value={clientId}
-        onChange={(e) => setClientId(e.target.value)}
-      />
+      <div>
+        <label>Seleccionar Cliente:</label>
+        <select onChange={(e) => setSelectedClient(clients.find(client => client._id === e.target.value))}>
+          <option value="">--Seleccione un Cliente--</option>
+          {clients.map(client => (
+            <option key={client._id} value={client._id}>{client.name}</option>
+          ))}
+        </select>
+      </div>
       <input
         type="number"
         placeholder="Monto"
         value={monto}
         onChange={(e) => setMonto(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Destinatario"
-        value={destinatario}
-        onChange={(e) => setDestinatario(e.target.value)}
       />
       <input
         type="date"
