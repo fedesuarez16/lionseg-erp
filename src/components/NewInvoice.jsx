@@ -15,7 +15,7 @@ const NewInvoice = () => {
     // Fetch clients from the server
     const fetchClients = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/clientes');
+        const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/clientes');
         setClients(response.data);
       } catch (err) {
         console.error('Error fetching clients:', err);
@@ -31,7 +31,7 @@ const NewInvoice = () => {
     }
 
     try {
-      const response = await axios.post(`http://localhost:3000/api/clientes/${selectedClientId}/generar-factura`, {
+      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${selectedClientId}/generar-factura`, {
         monto,
         destinatario: selectedClientId,
         fechaFactura,
