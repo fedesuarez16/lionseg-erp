@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
+import InvoiceModal from './InvoiceModal';  // Asegúrate de importar el modal
 
 const ClientProfile = () => {
   const { clientId } = useParams();
@@ -18,6 +19,7 @@ const ClientProfile = () => {
     services: [],
     invoiceLinks: []
   });
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);  // Estado para controlar el modal
 
   useEffect(() => {
     axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`)
@@ -87,6 +89,13 @@ const ClientProfile = () => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleInvoiceCreated = (newInvoice) => {
+    setClient({
+      ...client,
+      invoiceLinks: [...client.invoiceLinks, newInvoice]
+    });
   };
 
   if (loading) {
@@ -295,18 +304,32 @@ const ClientProfile = () => {
           </div>
 
           <button
-        onClick={handleEditToggle}
-        className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-      >
-        {isEditing ? 'Cancelar' : 'Editar'}
-      </button>
-      <button
-        onClick={handleDeleteClient}
-        className="fixed bottom-4 right-24 bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
-      >
-        Eliminar
-      </button>
+            onClick={handleEditToggle}
+            className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            {isEditing ? 'Cancelar' : 'Editar'}
+          </button>
+          <button
+            onClick={handleDeleteClient}
+            className="fixed bottom-4 right-24 bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            Eliminar
+          </button>
+          <button
+            onClick={() => setIsInvoiceModalOpen(true)}
+            className="fixed bottom-4 right-44 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            Crear Factura
+          </button>
         </div>
+      )}
+
+      {isInvoiceModalOpen && (
+        <InvoiceModal
+          clientId={clientId}
+          onClose={() => setIsInvoiceModalOpen(false)}
+          onInvoiceCreated={handleInvoiceCreated}
+        />
       )}
     </div>
   );
