@@ -1,0 +1,83 @@
+// NewInvoice.js
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const NewInvoice = () => {
+  const [clientId, setClientId] = useState('');
+  const [monto, setMonto] = useState('');
+  const [destinatario, setDestinatario] = useState('');
+  const [fechaFactura, setFechaFactura] = useState('');
+  const [fechaVencimiento, setFechaVencimiento] = useState('');
+  const [descripcion, setDescripcion] = useState('');
+  const [result, setResult] = useState('');
+  const [error, setError] = useState('');
+
+  const handleGenerateInvoice = async () => {
+    try {
+      const response = await axios.post(`http://localhost:3000/api/clientes/${clientId}/generar-factura`, {
+        monto,
+        destinatario,
+        fechaFactura,
+        fechaVencimiento,
+        descripcion,
+      });
+      setResult(response.data.facturaLink);
+      setError('');
+    } catch (err) {
+      setError('Error al generar la factura');
+      setResult('');
+    }
+  };
+
+  return (
+    <div>
+      <h2>Generar Factura</h2>
+      <input
+        type="text"
+        placeholder="ID del Cliente"
+        value={clientId}
+        onChange={(e) => setClientId(e.target.value)}
+      />
+      <input
+        type="number"
+        placeholder="Monto"
+        value={monto}
+        onChange={(e) => setMonto(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Destinatario"
+        value={destinatario}
+        onChange={(e) => setDestinatario(e.target.value)}
+      />
+      <input
+        type="date"
+        placeholder="Fecha de la Factura"
+        value={fechaFactura}
+        onChange={(e) => setFechaFactura(e.target.value)}
+      />
+      <input
+        type="date"
+        placeholder="Fecha de Vencimiento"
+        value={fechaVencimiento}
+        onChange={(e) => setFechaVencimiento(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Descripción"
+        value={descripcion}
+        onChange={(e) => setDescripcion(e.target.value)}
+      />
+      <button onClick={handleGenerateInvoice}>Generar Factura</button>
+      {result && (
+        <div>
+          <h3>Factura Generada:</h3>
+          <a href={result} target="_blank" rel="noopener noreferrer">Ver Factura</a>
+        </div>
+      )}
+      {error && <p>{error}</p>}
+    </div>
+  );
+};
+
+export default NewInvoice;

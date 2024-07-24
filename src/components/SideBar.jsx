@@ -55,7 +55,7 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
-              <Link to="/reportes" className="block text-white hover:bg-gray-700 p-2 rounded transition-colors duration-300">
+              <Link to="/factura-nueva" className="block text-white hover:bg-gray-700 p-2 rounded transition-colors duration-300">
                 Generar factura
               </Link>
             </li>

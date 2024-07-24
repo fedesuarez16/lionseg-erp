@@ -5,6 +5,7 @@ import ClientProfile from './components/ClientProfile';
 import Invoices from './components/InvoicesList';
 import Sidebar from './components/SideBar'; // Import the Sidebar component
 import GeneradorFacturas from './components/GeneradorFacturas';
+import NewInvoice from './components/NewInvoice';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
             <Route path="/clients" element={<ClientList />} />
             <Route path="/clients/:clientId" element={<ClientProfile />} />
             <Route path="/facturas" element={<GeneradorFacturas />} />
+            <Route path="/factura-nueva" element={<NewInvoice />} />
+
             {/* New routes based on Sidebar */}
             
           </Routes>
