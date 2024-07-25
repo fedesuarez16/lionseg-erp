@@ -32,7 +32,7 @@ const InvoiceModal = ({ clientId, onClose, onInvoiceCreated }) => {
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
       <div className="bg-white p-4 rounded-md shadow-md w-1/2">
-        <h2 className="text-xl font-bold mb-4">Generar Factura</h2>
+        <h2 className="text-xl font-bold mb-6">Generar Factura</h2>
         <input
           type="number"
           placeholder="Monto"
