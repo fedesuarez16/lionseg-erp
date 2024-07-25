@@ -15,8 +15,9 @@ const InvoiceModal = ({ clientId, onClose, onInvoiceCreated }) => {
     }
 
     try {
-      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/generar-factura`, {
+      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/generar`, {
         monto,
+        destinatario: clientId,
         fechaFactura,
         fechaVencimiento,
         descripcion,
