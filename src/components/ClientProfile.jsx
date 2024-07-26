@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
-import InvoiceModal from './InvoiceModal';  // Asegúrate de importar el modal
+import InvoiceModal from './InvoiceModal';
 
 const ClientProfile = () => {
   const { clientId } = useParams();
@@ -11,7 +11,7 @@ const ClientProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState('services'); // Default active tab is 'services'
+  const [activeTab, setActiveTab] = useState('services');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,7 +19,7 @@ const ClientProfile = () => {
     services: [],
     invoiceLinks: []
   });
-  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);  // Estado para controlar el modal
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
 
   useEffect(() => {
     axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`)
@@ -65,6 +65,21 @@ const ClientProfile = () => {
     });
   };
 
+  const handleAddService = () => {
+    setFormData({
+      ...formData,
+      services: [...formData.services, { producto: '', price: 0, invoiceCycle: '', paymentMethod: '', domains: [] }],
+    });
+  };
+
+  const handleRemoveService = (index) => {
+    const newServices = formData.services.filter((_, i) => i !== index);
+    setFormData({
+      ...formData,
+      services: newServices,
+    });
+  };
+
   const handleFormSubmit = () => {
     axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`, formData)
       .then((response) => {
@@ -95,21 +110,6 @@ const ClientProfile = () => {
     setClient({
       ...client,
       invoiceLinks: [...client.invoiceLinks, newInvoice]
-    });
-  };
-
-  const handleAddService = () => {
-    setFormData({
-      ...formData,
-      services: [...formData.services, { producto: '', price: 0, invoiceCycle: '', paymentMethod: '', domains: [] }]
-    });
-  };
-
-  const handleRemoveService = (index) => {
-    const newServices = formData.services.filter((_, i) => i !== index);
-    setFormData({
-      ...formData,
-      services: newServices
     });
   };
 
@@ -207,7 +207,7 @@ const ClientProfile = () => {
           ))}
           <button
             onClick={handleAddService}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md"
           >
             Añadir Servicio
           </button>
@@ -236,73 +236,127 @@ const ClientProfile = () => {
                 onChange={(e) => handleInvoiceChange(index, 'expirationDate', e.target.value)}
                 className="block w-full p-2 border border-gray-300 rounded-md"
               />
+              <label className="block mt-4 mb-2">Estado:</label>
+              <select
+                value={invoiceLink.state}
+                onChange={(e) => handleInvoiceChange(index, 'state', e.target.value)}
+                className="block w-full p-2 border border-gray-300 rounded-md"
+              >
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="overdue">Overdue</option>
+              </select>
             </div>
           ))}
 
           <button
             onClick={handleFormSubmit}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
+            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md"
           >
-            Guardar cambios
+            Guardar
           </button>
         </div>
       ) : (
-        <div className="bg-white p-4 rounded-md shadow-md">
-          <p><strong>Nombre:</strong> {client.name}</p>
-          <p><strong>Email:</strong> {client.email}</p>
-          <p><strong>Teléfono:</strong> {client.phoneNumber}</p>
-          <h2 className="text-xl font-bold mt-4 mb-2">Servicios</h2>
-          <ul>
-            {client.services.map((service, index) => (
-              <li key={index}>
-                <p><strong>Producto:</strong> {service.producto}</p>
-                <p><strong>Precio:</strong> {service.price}</p>
-                <p><strong>Ciclo de facturación:</strong> {service.invoiceCycle}</p>
-                <p><strong>Método de pago:</strong> {service.paymentMethod}</p>
-                <p><strong>Dominios:</strong> {service.domains.join(', ')}</p>
-              </li>
-            ))}
-          </ul>
+        <div>
+          <div className="flex mb-4">
+            <div className="w-1/2 p-4">
+              <p className="font-semibold">Nombre:</p>
+              <p className="w-auto bg-white mb-2 p-2 rounded">{client.name}</p>
+              <p className="font-semibold">Email:</p>
+              <p className="w-auto bg-white mb-2 p-2 rounded">{client.email}</p>
+              <p className="font-semibold">Teléfono:</p>
+              <p className="w-auto bg-white p-2 rounded">{client.phoneNumber}</p>
+            </div>
+            <div className="w-1/2 p-4">
+              <p className="font-semibold">Fecha de creación:</p>
+              <p className="w-auto bg-white mb-2 p-2 rounded">{new Date(client.creationDate).toLocaleDateString()}</p>
+              <p className="font-semibold">Estado del cliente:</p>
+              <p className="w-auto bg-white mb-2 p-2 rounded">{client.state}</p>
+            </div>
+          </div>
 
-          <h2 className="text-xl font-bold mt-4 mb-2">Info de facturación</h2>
-          <ul>
-            {client.invoiceLinks.map((invoiceLink, index) => (
-              <li key={index}>
-                <p><strong>Número de factura:</strong> {invoiceLink.fileName}</p>
-                <p><strong>Fecha de registro:</strong> {new Date(invoiceLink.registrationDate).toLocaleDateString()}</p>
-                <p><strong>Fecha de expiración:</strong> {new Date(invoiceLink.expirationDate).toLocaleDateString()}</p>
-              </li>
-            ))}
-          </ul>
+          <div className="w-full mb-4">
+            <h2 className="text-xl font-bold mb-2">Servicios</h2>
+            <table className="min-w-full border border-collapse border-gray-800">
+              <thead>
+                <tr className="bg-gray-800 text-white">
+                  <th className="border p-2">Producto</th>
+                  <th className="border p-2">Precio</th>
+                  <th className="border p-2">Ciclo de facturación</th>
+                  <th className="border p-2">Método de pago</th>
+                  <th className="border p-2">Dominios</th>
+                </tr>
+              </thead>
+              <tbody>
+                {client.services.map((service, index) => (
+                  <tr key={index}>
+                    <td className="border bg-white p-2">{service.producto}</td>
+                    <td className="border bg-white p-2">{service.price}</td>
+                    <td className="border bg-white p-2">{service.invoiceCycle}</td>
+                    <td className="border bg-white p-2">{service.paymentMethod}</td>
+                    <td className="border bg-white p-2">{service.domains.join(', ')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p className="font-semibold">Info de facturación:</p>
+          <div className="w-full mb-4">
+            <table className="min-w-full border border-collapse border-gray-800">
+              <thead>
+                <tr className="bg-gray-800 text-white">
+                  <th className="border p-2">Número de factura</th>
+                  <th className="border p-2">Fecha de registro</th>
+                  <th className="border p-2">Fecha de expiración</th>
+                  <th className="border p-2">Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {client.invoiceLinks.map((invoiceLink, index) => (
+                  <tr key={index}>
+                    <td className="border bg-white p-2">
+                      <a href={`https://lionseg-df2520243ed6.herokuapp.com/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
+                        {invoiceLink.fileName}
+                      </a>
+                    </td>
+                    <td className="border bg-white p-2">{new Date(invoiceLink.registrationDate).toLocaleDateString()}</td>
+                    <td className="border bg-white p-2">{new Date(invoiceLink.expirationDate).toLocaleDateString()}</td>
+                    <td className="border bg-white p-2">{invoiceLink.state}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <button
+            onClick={handleEditToggle}
+            className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            {isEditing ? 'Cancelar' : 'Editar'}
+          </button>
+          <button
+            onClick={handleDeleteClient}
+            className="fixed bottom-4 right-24 bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            Eliminar
+          </button>
+          <button
+            onClick={() => setIsInvoiceModalOpen(true)}
+            className="fixed bottom-4 right-44 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            Crear Factura
+          </button>
         </div>
       )}
 
-      <button
-        onClick={handleEditToggle}
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md"
-      >
-        {isEditing ? 'Cancelar' : 'Editar Cliente'}
-      </button>
-      <button
-        onClick={handleDeleteClient}
-        className="mt-4 ml-4 px-4 py-2 bg-red-600 text-white rounded-md"
-      >
-        Eliminar Cliente
-      </button>
-
-      <InvoiceModal
-        isOpen={isInvoiceModalOpen}
-        onClose={() => setIsInvoiceModalOpen(false)}
-        clientId={clientId}
-        onInvoiceCreated={handleInvoiceCreated}
-      />
-
-      <button
-        onClick={() => setIsInvoiceModalOpen(true)}
-        className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md"
-      >
-        Añadir Factura
-      </button>
+      {isInvoiceModalOpen && (
+        <InvoiceModal
+          clientId={clientId}
+          onClose={() => setIsInvoiceModalOpen(false)}
+          onInvoiceCreated={handleInvoiceCreated}
+        />
+      )}
     </div>
   );
 };
