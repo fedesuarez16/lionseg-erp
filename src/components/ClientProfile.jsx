@@ -134,20 +134,13 @@ const ClientProfile = () => {
             name="name"
             value={formData.name}
             onChange={handleInputChange}
-            className="block w-full p-2 border border-gray-300 rounded-md"
+            className="block  p-2 border border-gray-300 rounded-md"
           /></h1>
       </div>
 
       {isEditing ? (
         <div className="bg-white p-4 rounded-md shadow-md">
-          <label className="block mb-2">Nombre:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            className="block w-full p-2 border border-gray-300 rounded-md"
-          />
+        
           <label className="block mt-4 mb-2">Email:</label>
           <input
             type="text"
