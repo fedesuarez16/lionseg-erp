@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import IncomeNavbar from './IncomeNavbar';
 
 const TotalIncome = () => {
   const [totalIngresos, setTotalIngresos] = useState(0);
@@ -66,19 +67,26 @@ const TotalIncome = () => {
 
   return (
     <div className="p-4">
+      <IncomeNavbar/>
       {error ? (
         <p className="text-red-500">{error}</p>
       ) : (
         <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Total de Ingresos</h2>
-          <p className="text-xl mb-6">${totalIngresos.toFixed(2)} ARS</p>
-
-          <h3 className="text-xl font-semibold mb-4">Ingresos Semanales</h3>
-          <p className="text-xl mb-6">${ingresosSemanales.toFixed(2)} ARS</p>
-
-          <h3 className="text-xl font-semibold mb-4">Ingresos Diarios</h3>
-          <p className="text-xl mb-6">${ingresosDiarios.toFixed(2)} ARS</p>
-
+          <h2 className="text-2xl font-bold mb-4">Ingresos</h2>
+          <div className="flex justify-around mb-6">
+            <div className="text-center">
+              <h3 className="text-xl font-semibold">Total</h3>
+              <p className="text-lg">${totalIngresos.toFixed(2)} ARS</p>
+            </div>
+            <div className="text-center">
+              <h3 className="text-xl font-semibold">Semanales</h3>
+              <p className="text-lg">${ingresosSemanales.toFixed(2)} ARS</p>
+            </div>
+            <div className="text-center">
+              <h3 className="text-xl font-semibold">Diarios</h3>
+              <p className="text-lg">${ingresosDiarios.toFixed(2)} ARS</p>
+            </div>
+          </div>
           <h3 className="text-xl font-semibold mb-4">Detalles de Ingresos</h3>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
