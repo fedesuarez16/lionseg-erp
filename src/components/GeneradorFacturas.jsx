@@ -6,6 +6,7 @@ const GeneradorFacturas = () => {
   const [facturas, setFacturas] = useState([]);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'paid', 'unpaid'
+  const [searchQuery, setSearchQuery] = useState(''); // Nueva línea para el término de búsqueda
 
   const generarFacturas = async () => {
     try {
@@ -64,12 +65,9 @@ const GeneradorFacturas = () => {
       setError('Error al actualizar el estado de la factura');
     }
   };
-  
-
-  
 
   const filterAndSortFacturas = (facturas) => {
-    // Filtrar
+    // Filtrar por estado
     const facturasFiltradas = facturas.filter(invoiceLink => {
       if (filter === 'paid') {
         return invoiceLink.state === 'paid';
@@ -79,8 +77,13 @@ const GeneradorFacturas = () => {
       return true;
     });
 
+    // Filtrar por término de búsqueda
+    const facturasBuscadas = facturasFiltradas.filter(invoiceLink => 
+      invoiceLink.clienteName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     // Ordenar
-    return facturasFiltradas.sort((a, b) => new Date(b.registrationDate) - new Date(a.registrationDate));
+    return facturasBuscadas.sort((a, b) => new Date(b.registrationDate) - new Date(a.registrationDate));
   };
 
   useEffect(() => {
@@ -90,17 +93,17 @@ const GeneradorFacturas = () => {
   return (
     <div>
       <div className="bg-gray-100 min-h-screen h-auto">
-        <Navbar />
+        <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         <table className="min-w-full bg-white rounded border border-collapse ">
-        <div className="p-4 h-12">
-          <label htmlFor="filter">Filtrar: </label>
-          <select id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="all">Todas</option>
-            <option value="paid">Pagadas</option>
-            <option value="unpaid">Impagas</option>
-          </select>
-        </div>
+          <div className="p-4 h-12">
+            <label htmlFor="filter">Filtrar: </label>
+            <select id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
+              <option value="all">Todas</option>
+              <option value="paid">Pagadas</option>
+              <option value="unpaid">Impagas</option>
+            </select>
+          </div>
           <thead>
             <tr className="bg-gray-300 text-black">
               <th className="border p-2 rounded">Invoice Link</th>
@@ -131,17 +134,15 @@ const GeneradorFacturas = () => {
                   <td className="border p-2">{invoiceLink.total.toFixed(2)}</td>
                   <td className="border p-2">{invoiceLink.paymentMethods || 'N/A'}</td>
                   <td className="border p-2">
-                  <select
-                    value={invoiceLink.state}
-                    onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
-                    className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="paid">Paid</option>
-                    <option value="overdue">Overdue</option>
-                  </select>
-
-
+                    <select
+                      value={invoiceLink.state}
+                      onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
+                      className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="paid">Paid</option>
+                      <option value="overdue">Overdue</option>
+                    </select>
                   </td>
                 </tr>
               ))
