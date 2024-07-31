@@ -5,6 +5,8 @@ const TotalIncome = () => {
   const [totalIngresos, setTotalIngresos] = useState(0);
   const [ingresos, setIngresos] = useState([]);
   const [error, setError] = useState('');
+  const [ingresosDiarios, setIngresosDiarios] = useState(0);
+  const [ingresosSemanales, setIngresosSemanales] = useState(0);
 
   useEffect(() => {
     const fetchTotalIngresos = async () => {
@@ -26,6 +28,7 @@ const TotalIncome = () => {
         const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/ingresos');
         if (response.status === 200) {
           setIngresos(response.data);
+          calcularIngresosDiariosYsemanales(response.data);
         } else {
           setError('Error al obtener los ingresos');
         }
@@ -33,6 +36,28 @@ const TotalIncome = () => {
         console.error('Error al obtener los ingresos:', error);
         setError('Error al obtener los ingresos');
       }
+    };
+
+    const calcularIngresosDiariosYsemanales = (ingresos) => {
+      const hoy = new Date();
+      let ingresosDiarios = 0;
+      let ingresosSemanales = 0;
+
+      ingresos.forEach(ingreso => {
+        const fechaIngreso = new Date(ingreso.date);
+        const unDia = 24 * 60 * 60 * 1000; // Milisegundos en un día
+
+        if (hoy.toDateString() === fechaIngreso.toDateString()) {
+          ingresosDiarios += ingreso.amount;
+        }
+
+        if ((hoy - fechaIngreso) / unDia <= 7) {
+          ingresosSemanales += ingreso.amount;
+        }
+      });
+
+      setIngresosDiarios(ingresosDiarios);
+      setIngresosSemanales(ingresosSemanales);
     };
 
     fetchTotalIngresos();
@@ -47,6 +72,13 @@ const TotalIncome = () => {
         <div className="bg-white shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-4">Total de Ingresos</h2>
           <p className="text-xl mb-6">${totalIngresos.toFixed(2)} ARS</p>
+
+          <h3 className="text-xl font-semibold mb-4">Ingresos Semanales</h3>
+          <p className="text-xl mb-6">${ingresosSemanales.toFixed(2)} ARS</p>
+
+          <h3 className="text-xl font-semibold mb-4">Ingresos Diarios</h3>
+          <p className="text-xl mb-6">${ingresosDiarios.toFixed(2)} ARS</p>
+
           <h3 className="text-xl font-semibold mb-4">Detalles de Ingresos</h3>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-300 rounded-lg">
