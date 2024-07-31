@@ -94,7 +94,7 @@ const GeneradorFacturas = () => {
 
         <table className="min-w-full bg-white rounded border border-collapse ">
         <div className="p-4 h-12">
-          <label htmlFor="filter">Filtrar por estado: </label>
+          <label htmlFor="filter">Filtrar: </label>
           <select id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
             <option value="all">Todas</option>
             <option value="paid">Pagadas</option>
