@@ -23,7 +23,7 @@ const GeneradorFacturas = () => {
   };
 
   const fetchFacturas = async () => {
-    try {
+    try { 
       const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/clientes');
       if (response.status === 200) {
         // Aplanar la estructura de datos
@@ -64,6 +64,8 @@ const GeneradorFacturas = () => {
       setError('Error al actualizar el estado de la factura');
     }
   };
+  
+
   
 
   const filterAndSortFacturas = (facturas) => {

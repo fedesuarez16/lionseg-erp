@@ -78,6 +78,7 @@ const Sidebar = () => {
         >
           <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
           {isSidebarOpen && <span>Cerrar Sesión</span>}
+          
         </button>
       </div>
     </div>
