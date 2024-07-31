@@ -129,7 +129,13 @@ const ClientProfile = () => {
     <div className="p-4 bg-gray-100 h-auto">
       <Navbar />
       <div>
-        <h1 className="text-2xl font-bold m-4 text-gray-800">Perfil del Cliente</h1>
+        <h1 className="text-2xl font-bold m-4 text-gray-800"> <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            className="block w-full p-2 border border-gray-300 rounded-md"
+          /></h1>
       </div>
 
       {isEditing ? (
