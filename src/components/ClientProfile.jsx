@@ -134,13 +134,20 @@ const ClientProfile = () => {
             name="name"
             value={formData.name}
             onChange={handleInputChange}
-            className="block  p-2 border border-gray-300 rounded-md"
+            className="block w-full p-2 border border-gray-300 rounded-md"
           /></h1>
       </div>
 
       {isEditing ? (
         <div className="bg-white p-4 rounded-md shadow-md">
-        
+          <label className="block mb-2">Nombre:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            className="block w-full p-2 border border-gray-300 rounded-md"
+          />
           <label className="block mt-4 mb-2">Email:</label>
           <input
             type="text"
@@ -259,8 +266,6 @@ const ClientProfile = () => {
         <div>
           <div className="flex mb-4">
             <div className="w-1/2 p-4">
-              <p className="font-semibold">Nombre:</p>
-              <p className="w-auto bg-white mb-2 p-2 rounded">{client.name}</p>
               <p className="font-semibold">Email:</p>
               <p className="w-auto bg-white mb-2 p-2 rounded">{client.email}</p>
               <p className="font-semibold">Teléfono:</p>
