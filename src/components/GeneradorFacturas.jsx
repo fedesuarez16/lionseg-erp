@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
+import SearchBarInvoice from './SearchBarInvoice';
 
 const GeneradorFacturas = () => {
   const [facturas, setFacturas] = useState([]);
@@ -93,7 +94,7 @@ const GeneradorFacturas = () => {
   return (
     <div>
       <div className="bg-gray-100 min-h-screen h-auto">
-        <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <SearchBarInvoice searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         <table className="min-w-full bg-white rounded border border-collapse ">
           <div className="p-4 h-12">
