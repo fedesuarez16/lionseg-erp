@@ -66,7 +66,7 @@ const TotalIncome = () => {
   }, []);
 
   return (
-    <div className="p-4">
+    <div className="">
       <IncomeNavbar/>
       {error ? (
         <p className="text-red-500">{error}</p>
