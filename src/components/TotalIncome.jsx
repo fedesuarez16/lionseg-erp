@@ -40,21 +40,32 @@ const TotalIncome = () => {
   }, []);
 
   return (
-    <div>
+    <div className="p-4">
       {error ? (
-        <p>{error}</p>
+        <p className="text-red-500">{error}</p>
       ) : (
-        <div>
-          <h2>Total de Ingresos</h2>
-          <p>${totalIngresos.toFixed(2)} ARS</p>
-          <h3>Detalles de Ingresos</h3>
-          <ul>
-            {ingresos.map((ingreso, index) => (
-              <li key={index}>
-                ${ingreso.amount.toFixed(2)} ARS - {new Date(ingreso.date).toLocaleDateString()}
-              </li>
-            ))}
-          </ul>
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-bold mb-4">Total de Ingresos</h2>
+          <p className="text-xl mb-6">${totalIngresos.toFixed(2)} ARS</p>
+          <h3 className="text-xl font-semibold mb-4">Detalles de Ingresos</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
+              <thead className="bg-gray-200">
+                <tr>
+                  <th className="py-2 px-4 border-b">Monto</th>
+                  <th className="py-2 px-4 border-b">Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ingresos.map((ingreso, index) => (
+                  <tr key={index} className="border-b hover:bg-gray-100">
+                    <td className="py-2 px-4">${ingreso.amount.toFixed(2)} ARS</td>
+                    <td className="py-2 px-4">{new Date(ingreso.date).toLocaleDateString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
