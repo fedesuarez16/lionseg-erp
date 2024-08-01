@@ -1,78 +1,93 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import Modal from 'react-modal';
 
-const InvoiceModal = ({ clientId, onClose, onInvoiceCreated }) => {
-  const [monto, setMonto] = useState('');
-  const [fechaFactura, setFechaFactura] = useState('');
-  const [fechaVencimiento, setFechaVencimiento] = useState('');
-  const [descripcion, setDescripcion] = useState('');
-  const [error, setError] = useState('');
+Modal.setAppElement('#root');
 
-  const handleGenerateInvoice = async () => {
-    if (!monto || !fechaFactura || !fechaVencimiento || !descripcion) {
-      setError('Por favor, complete todos los campos');
-      return;
-    }
-  
-    try {
-      console.log({ monto, fechaFactura, fechaVencimiento, descripcion }); // Verificar los datos
-      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`, {
-        monto,
-        fechaFactura,
-        fechaVencimiento,
-        descripcion,
-      });
-      console.log(response.data); // Verificar la respuesta
-      onInvoiceCreated(response.data);
-      onClose();
-    } catch (err) {
-      console.error(err); // Verificar el error
-      setError('Error al generar la factura');
-    }
-  };
-  
-  
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Generar Factura</h2>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <div>
-          <label>Monto:</label>
-          <input
-            type="number"
-            value={monto}
-            onChange={(e) => setMonto(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Fecha de Factura:</label>
-          <input
-            type="date"
-            value={fechaFactura}
-            onChange={(e) => setFechaFactura(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Fecha de Vencimiento:</label>
-          <input
-            type="date"
-            value={fechaVencimiento}
-            onChange={(e) => setFechaVencimiento(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Descripción:</label>
-          <textarea
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-          />
-        </div>
-        <button onClick={handleGenerateInvoice}>Generar Factura</button>
-        <button onClick={onClose}>Cancelar</button>
-      </div>
-    </div>
-  );
+const InvoiceModal = ({ isOpen, onRequestClose }) => {
+    const [formValues, setFormValues] = useState({
+        descripcion: '',
+        fechaFactura: '',
+        fechaVencimiento: '',
+        monto: ''
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormValues({
+            ...formValues,
+            [name]: value
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        console.log(formValues); // Verifica que los datos del formulario están correctos
+
+        const response = await fetch('/api/invoices', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formValues)
+        });
+
+        const data = await response.json();
+        console.log(data); // Verifica la respuesta del servidor
+
+        if (response.ok) {
+            // Procesa la respuesta si es correcta
+            onRequestClose();
+        } else {
+            // Maneja errores si es necesario
+            console.error('Error al subir la factura');
+        }
+    };
+
+    return (
+        <Modal isOpen={isOpen} onRequestClose={onRequestClose}>
+            <h2>Crear Factura</h2>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Descripción:
+                    <input
+                        type="text"
+                        name="descripcion"
+                        value={formValues.descripcion}
+                        onChange={handleInputChange}
+                    />
+                </label>
+                <label>
+                    Fecha de Factura:
+                    <input
+                        type="date"
+                        name="fechaFactura"
+                        value={formValues.fechaFactura}
+                        onChange={handleInputChange}
+                    />
+                </label>
+                <label>
+                    Fecha de Vencimiento:
+                    <input
+                        type="date"
+                        name="fechaVencimiento"
+                        value={formValues.fechaVencimiento}
+                        onChange={handleInputChange}
+                    />
+                </label>
+                <label>
+                    Monto:
+                    <input
+                        type="number"
+                        name="monto"
+                        value={formValues.monto}
+                        onChange={handleInputChange}
+                    />
+                </label>
+                <button type="submit">Crear Factura</button>
+            </form>
+        </Modal>
+    );
 };
 
 export default InvoiceModal;
