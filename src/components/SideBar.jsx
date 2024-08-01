@@ -34,28 +34,28 @@ const Sidebar = () => {
         {/* Sidebar Content */}
         {isSidebarOpen && (
           <ul className="space-y-2">
-            <li>
-              <Link to="/clients" className="block text-white hover:bg-gray-700 p-2 rounded transition-colors duration-300">
+            <li className="border-b border-gray-700">
+              <Link to="/clients" className="block text-white hover:bg-gray-700 p-4 transition-colors duration-300">
                 Lista de Clientes
               </Link>
             </li>
-            <li>
-              <Link to="/facturas" className="block text-white hover:bg-gray-700 p-2 rounded transition-colors duration-300">
+            <li className="border-b border-gray-700">
+              <Link to="/facturas" className="block text-white hover:bg-gray-700 p-4 transition-colors duration-300">
                 Lista de Facturas
               </Link> 
             </li>
-            <li>
-              <Link to="/transactions" className="block text-white hover:bg-gray-700 p-2 rounded transition-colors duration-300">
+            <li className="border-b border-gray-700">
+              <Link to="/transactions" className="block text-white hover:bg-gray-700 p-4 transition-colors duration-300">
                 Lista de Transacciones
               </Link>
             </li>
-            <li>
-              <Link to="/reportes" className="block text-white hover:bg-gray-700 p-2 rounded transition-colors duration-300">
+            <li className="border-b border-gray-700">
+              <Link to="/reportes" className="block text-white hover:bg-gray-700 p-4 transition-colors duration-300">
                 Reportes
               </Link>
             </li>
-            <li>
-              <Link to="/factura-nueva" className="block text-white hover:bg-gray-700 p-2 rounded transition-colors duration-300">
+            <li className="border-b border-gray-700">
+              <Link to="/factura-nueva" className="block text-white hover:bg-gray-700 p-4 transition-colors duration-300">
                 Generar factura
               </Link>
             </li>
@@ -78,7 +78,6 @@ const Sidebar = () => {
         >
           <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
           {isSidebarOpen && <span>Cerrar Sesión</span>}
-          
         </button>
       </div>
     </div>
