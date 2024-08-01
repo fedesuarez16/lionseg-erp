@@ -15,7 +15,7 @@ const InvoiceModal = ({ clientId, onClose, onInvoiceCreated }) => {
     }
 
     try {
-      const response = await axios.post('https://lionseg-df2520243ed6.herokuapp.com/api/invoices', {
+      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`, {
         monto,
         destinatario: clientId,
         fechaFactura,
@@ -28,51 +28,45 @@ const InvoiceModal = ({ clientId, onClose, onInvoiceCreated }) => {
       setError('Error al generar la factura');
     }
   };
+
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
-      <div className="bg-white p-4 rounded-md shadow-md w-1/2">
-        <h2 className="text-xl font-bold mb-6">Generar Factura</h2>
-        <input
-          type="number"
-          placeholder="Monto"
-          value={monto}
-          onChange={(e) => setMonto(e.target.value)}
-          className="block w-full p-2 border border-gray-300 rounded-md mb-2"
-        />
-        <input
-          type="date"
-          placeholder="Fecha de la Factura"
-          value={fechaFactura}
-          onChange={(e) => setFechaFactura(e.target.value)}
-          className="block w-full p-2 border border-gray-300 rounded-md mb-2"
-        />
-        <input
-          type="date"
-          placeholder="Fecha de Vencimiento"
-          value={fechaVencimiento}
-          onChange={(e) => setFechaVencimiento(e.target.value)}
-          className="block w-full p-2 border border-gray-300 rounded-md mb-2"
-        />
-        <input
-          type="text"
-          placeholder="Descripción"
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
-          className="block w-full p-2 border border-gray-300 rounded-md mb-4"
-        />
-        {error && <p className="text-red-600">{error}</p>}
-        <button
-          onClick={handleGenerateInvoice}
-          className="bg-indigo-600 text-white p-2 rounded-md mr-2"
-        >
-          Generar
-        </button>
-        <button
-          onClick={onClose}
-          className="bg-gray-600 text-white p-2 rounded-md"
-        >
-          Cancelar
-        </button>
+    <div className="modal">
+      <div className="modal-content">
+        <h2>Generar Factura</h2>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div>
+          <label>Monto:</label>
+          <input
+            type="number"
+            value={monto}
+            onChange={(e) => setMonto(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Fecha de Factura:</label>
+          <input
+            type="date"
+            value={fechaFactura}
+            onChange={(e) => setFechaFactura(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Fecha de Vencimiento:</label>
+          <input
+            type="date"
+            value={fechaVencimiento}
+            onChange={(e) => setFechaVencimiento(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Descripción:</label>
+          <textarea
+            value={descripcion}
+            onChange={(e) => setDescripcion(e.target.value)}
+          />
+        </div>
+        <button onClick={handleGenerateInvoice}>Generar Factura</button>
+        <button onClick={onClose}>Cancelar</button>
       </div>
     </div>
   );
