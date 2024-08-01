@@ -13,21 +13,25 @@ const InvoiceModal = ({ clientId, onClose, onInvoiceCreated }) => {
       setError('Por favor, complete todos los campos');
       return;
     }
-
+  
     try {
+      console.log({ monto, fechaFactura, fechaVencimiento, descripcion }); // Verificar los datos
       const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`, {
         monto,
         fechaFactura,
         fechaVencimiento,
         descripcion,
       });
-      onInvoiceCreated(response.data);  // Llama al callback con la nueva factura
+      console.log(response.data); // Verificar la respuesta
+      onInvoiceCreated(response.data);
       onClose();
     } catch (err) {
+      console.error(err); // Verificar el error
       setError('Error al generar la factura');
     }
   };
-
+  
+  
   return (
     <div className="modal">
       <div className="modal-content">
