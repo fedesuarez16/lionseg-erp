@@ -21,6 +21,7 @@ const ClientProfile = () => {
   });
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
 
+
   useEffect(() => {
     axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`)
       .then((response) => {
@@ -127,6 +128,7 @@ const ClientProfile = () => {
       ...client,
       invoiceLinks: [...client.invoiceLinks, newInvoice]
     });
+    setIsInvoiceModalOpen(false);
   };
 
   if (loading) {
@@ -362,20 +364,21 @@ const ClientProfile = () => {
             Eliminar
           </button>
           <button
-            onClick={handleCreateInvoice}
-            className="fixed bottom-4 right-44 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-          >
-            Crear Factura
-          </button>
+          onClick={handleCreateInvoice}
+          className="fixed bottom-4 right-44 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+        >
+          Crear Factura
+        </button>
         </div>
       )}
 
-      {isInvoiceModalOpen && (
-        <InvoiceModal
-          onClose={() => setIsInvoiceModalOpen(false)}
-          onSubmit={handleInvoiceSubmit}
-        />
-      )}
+{isInvoiceModalOpen && (
+      <InvoiceModal
+        clientId={clientId}
+        onClose={() => setIsInvoiceModalOpen(false)}
+        onInvoiceCreated={handleInvoiceCreated}  // Pasar el callback al modal
+      />
+    )}
     </div>
   );
 };

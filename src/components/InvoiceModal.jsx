@@ -15,20 +15,19 @@ const InvoiceModal = ({ clientId, onClose, onInvoiceCreated }) => {
     }
 
     try {
-      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/generar`, {
+      const response = await axios.post('https://lionseg-df2520243ed6.herokuapp.com/api/invoices', {
         monto,
         destinatario: clientId,
         fechaFactura,
         fechaVencimiento,
         descripcion,
       });
-      onInvoiceCreated(response.data);
+      onInvoiceCreated(response.data);  // Llama al callback con la nueva factura
       onClose();
     } catch (err) {
       setError('Error al generar la factura');
     }
   };
-
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
       <div className="bg-white p-4 rounded-md shadow-md w-1/2">
