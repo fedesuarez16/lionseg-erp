@@ -47,6 +47,22 @@ const ClientProfile = () => {
     });
   };
 
+  const handleCreateInvoice = () => {
+    setIsInvoiceModalOpen(true);
+  };
+  
+  const handleInvoiceSubmit = (invoiceData) => {
+    axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`, invoiceData)
+      .then((response) => {
+        handleInvoiceCreated(response.data);
+        setIsInvoiceModalOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error creating invoice:', error);
+      });
+  };
+  
+
   const handleServiceChange = (index, field, value) => {
     const newServices = [...formData.services];
     newServices[index][field] = value;
@@ -346,7 +362,7 @@ const ClientProfile = () => {
             Eliminar
           </button>
           <button
-            onClick={() => setIsInvoiceModalOpen(true)}
+            onClick={handleCreateInvoice}
             className="fixed bottom-4 right-44 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
           >
             Crear Factura
@@ -356,9 +372,8 @@ const ClientProfile = () => {
 
       {isInvoiceModalOpen && (
         <InvoiceModal
-          clientId={clientId}
           onClose={() => setIsInvoiceModalOpen(false)}
-          onInvoiceCreated={handleInvoiceCreated}
+          onSubmit={handleInvoiceSubmit}
         />
       )}
     </div>
