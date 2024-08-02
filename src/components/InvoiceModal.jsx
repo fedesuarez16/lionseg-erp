@@ -1,77 +1,67 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const InvoiceModal = ({ clientId, onClose, onInvoiceCreated }) => {
+const InvoiceModal = ({ clientId }) => {
   const [monto, setMonto] = useState('');
   const [fechaFactura, setFechaFactura] = useState('');
   const [fechaVencimiento, setFechaVencimiento] = useState('');
   const [descripcion, setDescripcion] = useState('');
-  const [error, setError] = useState('');
 
-  const handleGenerateInvoice = async () => {
-    if (!monto || !fechaFactura || !fechaVencimiento || !descripcion) {
-      setError('Por favor, complete todos los campos');
-      return;
-    }
-  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const invoiceData = {
+      monto,
+      fechaFactura,
+      fechaVencimiento,
+      descripcion
+    };
+
     try {
-      console.log({ monto, fechaFactura, fechaVencimiento, descripcion }); // Verificar los datos
-      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`, {
-        monto,
-        fechaFactura,
-        fechaVencimiento,
-        descripcion,
-      });
-      console.log(response.data); // Verificar la respuesta
-      onInvoiceCreated(response.data);
-      onClose();
-    } catch (err) {
-      console.error(err); // Verificar el error
-      setError('Error al generar la factura');
+      const response = await axios.post(`/api/clientes/${clientId}/invoices`, invoiceData);
+      console.log('Factura creada:', response.data);
+      // Limpiar el formulario o hacer cualquier otra acción necesaria
+    } catch (error) {
+      console.error('Error al crear la factura:', error);
     }
   };
-  
-  
+
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <h2>Generar Factura</h2>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        <div>
-          <label>Monto:</label>
-          <input
-            type="number"
-            value={monto}
-            onChange={(e) => setMonto(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Fecha de Factura:</label>
-          <input
-            type="date"
-            value={fechaFactura}
-            onChange={(e) => setFechaFactura(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Fecha de Vencimiento:</label>
-          <input
-            type="date"
-            value={fechaVencimiento}
-            onChange={(e) => setFechaVencimiento(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Descripción:</label>
-          <textarea
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-          />
-        </div>
-        <button onClick={handleGenerateInvoice}>Generar Factura</button>
-        <button onClick={onClose}>Cancelar</button>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Monto:</label>
+        <input
+          type="text"
+          value={monto}
+          onChange={(e) => setMonto(e.target.value)}
+        />
       </div>
-    </div>
+      <div>
+        <label>Fecha de la Factura:</label>
+        <input
+          type="date"
+          value={fechaFactura}
+          onChange={(e) => setFechaFactura(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Fecha de Vencimiento:</label>
+        <input
+          type="date"
+          value={fechaVencimiento}
+          onChange={(e) => setFechaVencimiento(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Descripción:</label>
+        <input
+          type="text"
+          value={descripcion}
+          onChange={(e) => setDescripcion(e.target.value)}
+        />
+      </div>
+      <button type="submit">Crear Factura</button>
+    </form>
   );
 };
 
