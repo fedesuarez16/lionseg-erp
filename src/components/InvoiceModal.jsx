@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './InvoiceModal.css'; // Archivo de estilos CSS
 
 const InvoiceModal = ({ clientId }) => {
   const [monto, setMonto] = useState('');
@@ -28,43 +27,54 @@ const InvoiceModal = ({ clientId }) => {
   };
 
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close">&times;</span>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Monto:</label>
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+        <h2 className="text-2xl font-semibold mb-4">Crear Factura</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Monto:</label>
             <input
               type="text"
               value={monto}
               onChange={(e) => setMonto(e.target.value)}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
-          <div className="form-group">
-            <label>Fecha de la Factura:</label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Fecha de la Factura:</label>
             <input
               type="date"
               value={fechaFactura}
               onChange={(e) => setFechaFactura(e.target.value)}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
-          <div className="form-group">
-            <label>Fecha de Vencimiento:</label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Fecha de Vencimiento:</label>
             <input
               type="date"
               value={fechaVencimiento}
               onChange={(e) => setFechaVencimiento(e.target.value)}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
-          <div className="form-group">
-            <label>Descripción:</label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Descripción:</label>
             <input
               type="text"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
-          <button type="submit">Crear Factura</button>
+          <div className="flex justify-end">
+            <button 
+              type="submit" 
+              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Crear Factura
+            </button>
+          </div>
         </form>
       </div>
     </div>
