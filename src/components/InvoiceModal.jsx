@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './InvoiceModal.css'; // Archivo de estilos CSS
 
 const InvoiceModal = ({ clientId }) => {
   const [monto, setMonto] = useState('');
@@ -27,41 +28,46 @@ const InvoiceModal = ({ clientId }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Monto:</label>
-        <input
-          type="text"
-          value={monto}
-          onChange={(e) => setMonto(e.target.value)}
-        />
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close">&times;</span>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Monto:</label>
+            <input
+              type="text"
+              value={monto}
+              onChange={(e) => setMonto(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Fecha de la Factura:</label>
+            <input
+              type="date"
+              value={fechaFactura}
+              onChange={(e) => setFechaFactura(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Fecha de Vencimiento:</label>
+            <input
+              type="date"
+              value={fechaVencimiento}
+              onChange={(e) => setFechaVencimiento(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Descripción:</label>
+            <input
+              type="text"
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+            />
+          </div>
+          <button type="submit">Crear Factura</button>
+        </form>
       </div>
-      <div>
-        <label>Fecha de la Factura:</label>
-        <input
-          type="date"
-          value={fechaFactura}
-          onChange={(e) => setFechaFactura(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Fecha de Vencimiento:</label>
-        <input
-          type="date"
-          value={fechaVencimiento}
-          onChange={(e) => setFechaVencimiento(e.target.value)}
-        />
-      </div>
-      <div>
-        <label>Descripción:</label>
-        <input
-          type="text"
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
-        />
-      </div>
-      <button type="submit">Crear Factura</button>
-    </form>
+    </div>
   );
 };
 
