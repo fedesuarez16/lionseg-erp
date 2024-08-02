@@ -156,7 +156,7 @@ const GeneradorFacturas = () => {
 
       <button
         onClick={generarFacturas}
-        className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+        className="absolte bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
       >
         Generar Facturas
       </button>
