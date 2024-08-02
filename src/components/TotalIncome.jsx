@@ -66,41 +66,41 @@ const TotalIncome = () => {
   }, []);
 
   return (
-    <div className="P-2">
+    <div className="p-4 bg-gray-100 min-h-screen">
       <IncomeNavbar/>
       {error ? (
-        <p className="text-red-500">{error}</p>
+        <p className="text-red-500 text-center">{error}</p>
       ) : (
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Ingresos</h2>
-          <div className="flex justify-around mb-6">
-            <div className="text-center">
-              <h3 className="text-xl font-semibold">Total</h3>
-              <p className="text-lg">${totalIngresos.toFixed(2)} ARS</p>
+        <div className="bg-white shadow-lg rounded-lg p-6">
+          <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Ingresos</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+            <div className="bg-blue-100 p-4 rounded-lg text-center">
+              <h3 className="text-xl font-semibold text-blue-700">Total</h3>
+              <p className="text-2xl text-blue-900">${totalIngresos.toFixed(2)} ARS</p>
             </div>
-            <div className="text-center">
-              <h3 className="text-xl font-semibold">Semanales</h3>
-              <p className="text-lg">${ingresosSemanales.toFixed(2)} ARS</p>
+            <div className="bg-green-100 p-4 rounded-lg text-center">
+              <h3 className="text-xl font-semibold text-green-700">Semanales</h3>
+              <p className="text-2xl text-green-900">${ingresosSemanales.toFixed(2)} ARS</p>
             </div>
-            <div className="text-center">
-              <h3 className="text-xl font-semibold">Diarios</h3>
-              <p className="text-lg">${ingresosDiarios.toFixed(2)} ARS</p>
+            <div className="bg-yellow-100 p-4 rounded-lg text-center">
+              <h3 className="text-xl font-semibold text-yellow-700">Diarios</h3>
+              <p className="text-2xl text-yellow-900">${ingresosDiarios.toFixed(2)} ARS</p>
             </div>
           </div>
-          <h3 className="text-xl font-semibold mb-4">Detalles de Ingresos</h3>
+          <h3 className="text-2xl font-semibold mb-4 text-gray-700">Detalles de Ingresos</h3>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-300 rounded-lg">
-              <thead className="bg-gray-200">
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead className="bg-gray-100">
                 <tr>
-                  <th className="py-2 px-4 border-b">Monto</th>
-                  <th className="py-2 px-4 border-b">Fecha</th>
+                  <th className="py-3 px-6 border-b text-left">Monto</th>
+                  <th className="py-3 px-6 border-b text-left">Fecha</th>
                 </tr>
               </thead>
               <tbody>
                 {ingresos.map((ingreso, index) => (
-                  <tr key={index} className="border-b hover:bg-gray-100">
-                    <td className="py-2 px-4">${ingreso.amount.toFixed(2)} ARS</td>
-                    <td className="py-2 px-4">{new Date(ingreso.date).toLocaleDateString()}</td>
+                  <tr key={index} className="border-b hover:bg-gray-50">
+                    <td className="py-3 px-6">${ingreso.amount.toFixed(2)} ARS</td>
+                    <td className="py-3 px-6">{new Date(ingreso.date).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>
