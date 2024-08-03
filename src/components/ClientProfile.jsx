@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
 import InvoiceModal from './InvoiceModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faFileInvoiceDollar } from '@fortawesome/free-solid-svg-icons';
 
 const ClientProfile = () => {
   const { clientId } = useParams();
@@ -144,10 +146,10 @@ const ClientProfile = () => {
   }
 
   return (
-    <div className="p-4 bg-gray-100 h-auto">
+    <div className="p-4 bg-white  h-auto">
       <Navbar />
       <div>
-        <h1 className="text-2xl font-bold m-4 text-gray-800"> <input
+        <h1 className="text-2xl font-bold  mb-2 text-gray-800"> <input
             type="text"
             name="name"
             value={formData.name}
@@ -183,7 +185,7 @@ const ClientProfile = () => {
             className="block w-full p-2 border border-gray-300 rounded-md"
           />
 
-          <h2 className="text-xl font-bold mt-4 mb-2">Servicios</h2>
+          <h2 className="text-lg font-bold mt-4 mb-2">Servicios</h2>
           {formData.services.map((service, index) => (
             <div key={index} className="mb-4 p-4 border border-gray-300 rounded-md">
               <label className="block mb-2">Producto:</label>
@@ -207,13 +209,7 @@ const ClientProfile = () => {
                 onChange={(e) => handleServiceChange(index, 'invoiceCycle', e.target.value)}
                 className="block w-full p-2 border border-gray-300 rounded-md"
               />
-              <label className="block mt-4 mb-2">Método de pago:</label>
-              <input
-                type="text"
-                value={service.paymentMethod}
-                onChange={(e) => handleServiceChange(index, 'paymentMethod', e.target.value)}
-                className="block w-full p-2 border border-gray-300 rounded-md"
-              />
+          
               <label className="block mt-4 mb-2">Dominios:</label>
               <input
                 type="text"
@@ -236,42 +232,8 @@ const ClientProfile = () => {
             Añadir Servicio
           </button>
 
-          <h2 className="text-xl font-bold mt-4 mb-2">Info de facturación</h2>
-          {formData.invoiceLinks.map((invoiceLink, index) => (
-            <div key={index} className="mb-4 p-4 border border-gray-300 rounded-md">
-              <label className="block mb-2">Número de factura:</label>
-              <input
-                type="text"
-                value={invoiceLink.fileName}
-                onChange={(e) => handleInvoiceChange(index, 'fileName', e.target.value)}
-                className="block w-full p-2 border border-gray-300 rounded-md"
-              />
-              <label className="block mt-4 mb-2">Fecha de registro:</label>
-              <input
-                type="date"
-                value={invoiceLink.registrationDate ? new Date(invoiceLink.registrationDate).toISOString().split('T')[0] : ''}
-                onChange={(e) => handleInvoiceChange(index, 'registrationDate', e.target.value)}
-                className="block w-full p-2 border border-gray-300 rounded-md"
-              />
-              <label className="block mt-4 mb-2">Fecha de expiración:</label>
-              <input
-                type="date"
-                value={invoiceLink.expirationDate ? new Date(invoiceLink.expirationDate).toISOString().split('T')[0] : ''}
-                onChange={(e) => handleInvoiceChange(index, 'expirationDate', e.target.value)}
-                className="block w-full p-2 border border-gray-300 rounded-md"
-              />
-              <label className="block mt-4 mb-2">Estado:</label>
-              <select
-                value={invoiceLink.state}
-                onChange={(e) => handleInvoiceChange(index, 'state', e.target.value)}
-                className="block w-full p-2 border border-gray-300 rounded-md"
-              >
-                <option value="pending">Pending</option>
-                <option value="paid">Paid</option>
-                <option value="overdue">Overdue</option>
-              </select>
-            </div>
-          ))}
+          
+        
 
           <button
             onClick={handleFormSubmit}
@@ -282,27 +244,27 @@ const ClientProfile = () => {
         </div>
       ) : (
         <div>
-          <div className="flex mb-4">
-            <div className="w-1/2 p-4">
+          <div className="flex  border rounded border-gray-300">
+            <div className="w-1/2 p-4 ">
               <p className="font-semibold">Email:</p>
-              <p className="w-auto bg-white mb-2 p-2 rounded">{client.email}</p>
+              <p className="w-auto border rounded border-gray-300 bg-white mb-2 p-2 rounded">{client.email}</p>
               <p className="font-semibold">Teléfono:</p>
-              <p className="w-auto bg-white p-2 rounded">{client.phoneNumber}</p>
+              <p className="w-auto border rounded border-gray-300 bg-white p-2 rounded">{client.phoneNumber}</p>
             </div>
             <div className="w-1/2 p-4">
               <p className="font-semibold">Fecha de creación:</p>
-              <p className="w-auto bg-white mb-2 p-2 rounded">{new Date(client.creationDate).toLocaleDateString()}</p>
+              <p className="w-auto border rounded border-gray-300 bg-white mb-2 p-2 rounded">{new Date(client.creationDate).toLocaleDateString()}</p>
               <p className="font-semibold">Estado del cliente:</p>
-              <p className="w-auto bg-white mb-2 p-2 rounded">{client.state}</p>
+              <p className="w-auto border rounded border-gray-300 bg-white mb-2 p-2 rounded">{client.state}</p>
             </div>
           </div>
 
-          <div className="w-full mb-4">
-            <h2 className="text-xl font-bold mb-2">Servicios</h2>
+          <div className="w-full ">
+            <h2 className="text-xl  font-semibold py-4">Servicios</h2>
             <table className="min-w-full border border-collapse border-gray-800">
               <thead>
-                <tr className="bg-gray-800 text-white">
-                  <th className="border p-2">Producto</th>
+                <tr className=" text-gray-600 ">
+                  <th className="border font-regular p-2">Producto</th>
                   <th className="border p-2">Precio</th>
                   <th className="border p-2">Ciclo de facturación</th>
                   <th className="border p-2">Método de pago</th>
@@ -323,11 +285,11 @@ const ClientProfile = () => {
             </table>
           </div>
 
-          <p className="font-semibold">Info de facturación:</p>
+          <p className="font-semibold text-lg  py-4 ">Info de facturación</p>
           <div className="w-full mb-4">
             <table className="min-w-full border border-collapse border-gray-800">
               <thead>
-                <tr className="bg-gray-800 text-white">
+                <tr className=" text-gray-600">
                   <th className="border p-2">Número de factura</th>
                   <th className="border p-2">Fecha de registro</th>
                   <th className="border p-2">Fecha de expiración</th>
@@ -353,22 +315,22 @@ const ClientProfile = () => {
 
           <button
             onClick={handleEditToggle}
-            className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            className="fixed bottom-4 right-4 text-black bg-gray-100 border border-gray-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
           >
-            {isEditing ? 'Cancelar' : 'Editar'}
+            <FontAwesomeIcon icon={faEdit} />
           </button>
           <button
             onClick={handleDeleteClient}
-            className="fixed bottom-4 right-24 bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+            className="fixed bottom-4 right-24  text-black bg-gray-100 border border-gray-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
           >
-            Eliminar
+            <FontAwesomeIcon icon={faTrash} />
           </button>
           <button
-          onClick={handleCreateInvoice}
-          className="fixed bottom-4 right-44 bg-green-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-        >
-          Crear Factura
-        </button>
+            onClick={handleCreateInvoice}
+            className="fixed bottom-4 right-44 text-black bg-gray-100 border border-gray-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            <FontAwesomeIcon icon={faFileInvoiceDollar} />
+          </button>
         </div>
       )}
 

@@ -10,97 +10,116 @@ const TotalIncome = () => {
   const [ingresosSemanales, setIngresosSemanales] = useState(0);
 
   useEffect(() => {
-    const fetchTotalIngresos = async () => {
-      try {
-        const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/total-ingresos');
-        if (response.status === 200) {
-          setTotalIngresos(response.data.totalIngresos);
-        } else {
-          setError('Error al obtener el total de ingresos');
-        }
-      } catch (error) {
-        console.error('Error al obtener el total de ingresos:', error);
-        setError('Error al obtener el total de ingresos');
-      }
-    };
-
-    const fetchIngresos = async () => {
-      try {
-        const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/ingresos');
-        if (response.status === 200) {
-          setIngresos(response.data);
-          calcularIngresosDiariosYsemanales(response.data);
-        } else {
-          setError('Error al obtener los ingresos');
-        }
-      } catch (error) {
-        console.error('Error al obtener los ingresos:', error);
-        setError('Error al obtener los ingresos');
-      }
-    };
-
-    const calcularIngresosDiariosYsemanales = (ingresos) => {
-      const hoy = new Date();
-      let ingresosDiarios = 0;
-      let ingresosSemanales = 0;
-
-      ingresos.forEach(ingreso => {
-        const fechaIngreso = new Date(ingreso.date);
-        const unDia = 24 * 60 * 60 * 1000; // Milisegundos en un día
-
-        if (hoy.toDateString() === fechaIngreso.toDateString()) {
-          ingresosDiarios += ingreso.amount;
-        }
-
-        if ((hoy - fechaIngreso) / unDia <= 7) {
-          ingresosSemanales += ingreso.amount;
-        }
-      });
-
-      setIngresosDiarios(ingresosDiarios);
-      setIngresosSemanales(ingresosSemanales);
-    };
-
     fetchTotalIngresos();
     fetchIngresos();
   }, []);
 
+  const fetchTotalIngresos = async () => {
+    try {
+      const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/total-ingresos');
+      if (response.status === 200) {
+        setTotalIngresos(response.data.totalIngresos);
+      } else {
+        setError('Error al obtener el total de ingresos');
+      }
+    } catch (error) {
+      console.error('Error al obtener el total de ingresos:', error);
+      setError('Error al obtener el total de ingresos');
+    }
+  };
+
+  const fetchIngresos = async () => {
+    try {
+      const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/ingresos');
+      if (response.status === 200) {
+        setIngresos(response.data);
+        calcularIngresosDiariosYsemanales(response.data);
+      } else {
+        setError('Error al obtener los ingresos');
+      }
+    } catch (error) {
+      console.error('Error al obtener los ingresos:', error);
+      setError('Error al obtener los ingresos');
+    }
+  };
+
+  const calcularIngresosDiariosYsemanales = (ingresos) => {
+    const hoy = new Date();
+    let ingresosDiarios = 0;
+    let ingresosSemanales = 0;
+
+    ingresos.forEach(ingreso => {
+      const fechaIngreso = new Date(ingreso.date);
+      const unDia = 24 * 60 * 60 * 1000; // Milisegundos en un día
+
+      if (hoy.toDateString() === fechaIngreso.toDateString()) {
+        ingresosDiarios += ingreso.amount;
+      }
+
+      if ((hoy - fechaIngreso) / unDia <= 7) {
+        ingresosSemanales += ingreso.amount;
+      }
+    });
+
+    setIngresosDiarios(ingresosDiarios);
+    setIngresosSemanales(ingresosSemanales);
+  };
+
+  const borrarHistorialIngresos = async () => {
+    try {
+      await axios.delete('https://lionseg-df2520243ed6.herokuapp.com/api/ingresos');
+      setIngresos([]);
+      setIngresosDiarios(0);
+      setIngresosSemanales(0);
+      setTotalIngresos(0);
+    } catch (error) {
+      console.error('Error al borrar el historial de ingresos:', error);
+      setError('Error al borrar el historial de ingresos');
+    }
+  };
+
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
-      <IncomeNavbar/>
+    <div className="p-2 bg-white border rounded-xl min-h-screen h-auto relative">
+      <IncomeNavbar />
       {error ? (
         <p className="text-red-500 text-center">{error}</p>
       ) : (
         <div className="bg-white shadow-lg rounded-lg p-6">
-          <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Ingresos</h2>
+          <h2 className="text-2xl font-regular mb-6 text-center text-gray-800">Ingresos</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-            <div className="bg-blue-100 p-4 rounded-lg text-center">
-              <h3 className="text-xl font-semibold text-blue-700">Total</h3>
-              <p className="text-2xl text-blue-900">${totalIngresos.toFixed(2)} ARS</p>
+            <div className="border border-gray-300 p-4 rounded-lg text-center">
+              <h3 className="text-xl font-semibold text-gray-600">Total</h3>
+              <p className="text-2xl text-gray-600">${totalIngresos.toFixed(2)} ARS</p>
             </div>
-            <div className="bg-green-100 p-4 rounded-lg text-center">
-              <h3 className="text-xl font-semibold text-green-700">Semanales</h3>
-              <p className="text-2xl text-green-900">${ingresosSemanales.toFixed(2)} ARS</p>
+            <div className="border border-gray-300  p-4 rounded-lg text-center">
+              <h3 className="text-xl font-semibold text-gray-600">Semanales</h3>
+              <p className="text-2xl text-gray-600">${ingresosSemanales.toFixed(2)} ARS</p>
             </div>
-            <div className="bg-yellow-100 p-4 rounded-lg text-center">
-              <h3 className="text-xl font-semibold text-yellow-700">Diarios</h3>
-              <p className="text-2xl text-yellow-900">${ingresosDiarios.toFixed(2)} ARS</p>
+            <div className="border border-gray-300  p-4 rounded-lg text-center">
+              <h3 className="text-xl font-semibold text-gray-600">Diarios</h3>
+              <p className="text-2xl text-gray-600">${ingresosDiarios.toFixed(2)} ARS</p>
             </div>
           </div>
-          <h3 className="text-2xl font-semibold mb-4 text-gray-700">Detalles de Ingresos</h3>
+          <button 
+            onClick={borrarHistorialIngresos}
+            className="fixed bottom-4 right-4 text-black bg-gray-100 border border-gray-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+          >
+            Borrar Historial de Ingresos
+          </button>
+          <h3 className="text-lg font-regular  mb-4 text-gray-600">Detalles de Ingresos:</h3>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-              <thead className="bg-gray-100">
+            <table className="min-w-full bg-white border border-gray-300 rounded-xl">
+              <thead className="text-gray-600 font-regular ">
                 <tr>
-                  <th className="py-3 px-6 border-b text-left">Monto</th>
-                  <th className="py-3 px-6 border-b text-left">Fecha</th>
+                  <th className="py-4 px-6 border-b text-left">Monto</th>
+                  <th className="py-4 px-6 border-b text-left">Fecha</th>
                 </tr>
               </thead>
               <tbody>
                 {ingresos.map((ingreso, index) => (
                   <tr key={index} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-6">${ingreso.amount.toFixed(2)} ARS</td>
-                    <td className="py-3 px-6">{new Date(ingreso.date).toLocaleDateString()}</td>
+                    <td className="py-4 px-6 text-green-700">+ ${ingreso.amount.toFixed(2)} ARS</td>
+                    <td className="py-4 px-6">{new Date(ingreso.date).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>

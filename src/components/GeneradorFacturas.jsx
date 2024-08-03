@@ -7,13 +7,13 @@ const GeneradorFacturas = () => {
   const [facturas, setFacturas] = useState([]);
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'paid', 'unpaid'
-  const [searchQuery, setSearchQuery] = useState(''); // Nueva línea para el término de búsqueda
+  const [searchQuery, setSearchQuery] = useState('');
 
   const generarFacturas = async () => {
     try {
       const response = await axios.post('https://lionseg-df2520243ed6.herokuapp.com/api/generar-facturas');
       if (response.status === 200) {
-        fetchFacturas(); // Después de generar las facturas, actualiza la lista de facturas
+        fetchFacturas();
         setError('');
       } else {
         setError('Error al generar las facturas');
@@ -25,14 +25,13 @@ const GeneradorFacturas = () => {
   };
 
   const fetchFacturas = async () => {
-    try { 
+    try {
       const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/clientes');
       if (response.status === 200) {
-        // Aplanar la estructura de datos
-        const facturasAplanadas = response.data.flatMap(cliente => 
+        const facturasAplanadas = response.data.flatMap(cliente =>
           cliente.invoiceLinks.map(invoiceLink => ({
             ...invoiceLink,
-            clienteId: cliente._id, // Asegúrate de incluir clienteId aquí
+            clienteId: cliente._id,
             clienteName: cliente.name,
             total: cliente.services.reduce((acc, service) => acc + (service.price || 0), 0),
             paymentMethods: cliente.services.map(service => service.paymentMethod).filter(Boolean).join(', '),
@@ -54,9 +53,8 @@ const GeneradorFacturas = () => {
       const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clienteId}/invoiceLinks/${invoiceLinkId}/state`, {
         state: newState,
       });
-  
       if (response.status === 200) {
-        fetchFacturas(); // Refresh the list after updating the state
+        fetchFacturas();
         setError('');
       } else {
         setError('Error al actualizar el estado de la factura');
@@ -68,7 +66,6 @@ const GeneradorFacturas = () => {
   };
 
   const filterAndSortFacturas = (facturas) => {
-    // Filtrar por estado
     const facturasFiltradas = facturas.filter(invoiceLink => {
       if (filter === 'paid') {
         return invoiceLink.state === 'paid';
@@ -78,12 +75,10 @@ const GeneradorFacturas = () => {
       return true;
     });
 
-    // Filtrar por término de búsqueda
-    const facturasBuscadas = facturasFiltradas.filter(invoiceLink => 
+    const facturasBuscadas = facturasFiltradas.filter(invoiceLink =>
       invoiceLink.clienteName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Ordenar
     return facturasBuscadas.sort((a, b) => new Date(b.registrationDate) - new Date(a.registrationDate));
   };
 
@@ -92,74 +87,76 @@ const GeneradorFacturas = () => {
   }, []);
 
   return (
-    <div>
-      <div className="bg-gray-100 min-h-screen h-auto">
-        <SearchBarInvoice searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-
-        <table className="min-w-full bg-white rounded border border-collapse ">
-          <div className="p-4 h-12">
-            <label htmlFor="filter">Filtrar: </label>
-            <select id="filter" value={filter} onChange={(e) => setFilter(e.target.value)}>
-              <option value="all">Todas</option>
-              <option value="paid">Pagadas</option>
-              <option value="unpaid">Impagas</option>
-            </select>
-          </div>
-          <thead>
-            <tr className="bg-gray-300 text-black">
-              <th className="border p-2 rounded">Invoice Link</th>
-              <th className="border p-2 rounded">Nombre</th>
-              <th className="border p-2 rounded">Fecha de Emisión</th>
-              <th className="border p-2 rounded">Fecha de Expiración</th>
-              <th className="border p-2 rounded">Total</th>
-              <th className="border p-2 rounded">Método de Pago</th>
-              <th className="border p-2 rounded">Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filterAndSortFacturas(facturas).length === 0 ? (
-              <tr>
-                <td colSpan="7" className="border p-2">No hay facturas generadas</td>
-              </tr>
-            ) : (
-              filterAndSortFacturas(facturas).map(invoiceLink => (
-                <tr key={invoiceLink._id}>
-                  <td className="border p-2">
-                    <a href={`https://lionseg-df2520243ed6.herokuapp.com/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
-                      {invoiceLink.fileName}
-                    </a>
-                  </td>
-                  <td className="border p-2">{invoiceLink.clienteName}</td>
-                  <td className="border p-2">{invoiceLink.registrationDate ? new Date(invoiceLink.registrationDate).toLocaleDateString() : 'N/A'}</td>
-                  <td className="border p-2">{invoiceLink.expirationDate ? new Date(invoiceLink.expirationDate).toLocaleDateString() : 'N/A'}</td>
-                  <td className="border p-2">{invoiceLink.total.toFixed(2)}</td>
-                  <td className="border p-2">{invoiceLink.paymentMethods || 'N/A'}</td>
-                  <td className="border p-2">
-                    <select
-                      value={invoiceLink.state}
-                      onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
-                      className={`text-white p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-700' : 'text-red-700'}`}
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="paid">Paid</option>
-                      <option value="overdue">Overdue</option>
-                    </select>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+    <div className="p-2 bg-white border rounded-xl min-h-screen h-auto relative">
+      <SearchBarInvoice searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <div className="p-4 mb-6 h-8 ">
+        <label htmlFor="filter">Filtrar: </label>
+        <select
+          id="filter"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="ml-2 text-gray-400 px-2 border border-gray-300 rounded"
+        >
+          <option value="all">Todas</option>
+          <option value="paid">Pagadas</option>
+          <option value="unpaid">Impagas</option>
+        </select>
       </div>
+      <button
+        className="fixed bottom-4 right-6 pb-[14px] bg-gray-800 text-white py-2 px-[18px] rounded-full text-3xl"
+        onClick={generarFacturas}
+      >
+        +
+      </button>
+
+      <table className="min-w-full bg-white rounded border border-collapse border-gray-300">
+        <thead>
+          <tr className="text-gray-500 m-2">
+            <th className="font-semibold border-t border-b border-gray-300 p-4 rounded-tl-lg mx-2">Invoice Link</th>
+            <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Nombre</th>
+            <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Fecha de Emisión</th>
+            <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Fecha de Expiración</th>
+            <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Total</th>
+            <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Método de Pago</th>
+            <th className="font-semibold border-t border-b border-gray-300 p-4 rounded-tr-lg mx-2">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filterAndSortFacturas(facturas).length === 0 ? (
+            <tr>
+              <td colSpan="7" className="border-t border-b border-gray-300 p-4 mx-2">No hay facturas generadas</td>
+            </tr>
+          ) : (
+            filterAndSortFacturas(facturas).map((invoiceLink, index) => (
+              <tr key={invoiceLink._id} className="text-gray-600">
+                <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === filterAndSortFacturas(facturas).length - 1 ? 'rounded-bl-lg' : ''}`}>
+                  <a href={`https://lionseg-df2520243ed6.herokuapp.com/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
+                    {invoiceLink.fileName}
+                  </a>
+                </td>
+                <td className="border-t border-b border-gray-300 p-4 mx-2">{invoiceLink.clienteName}</td>
+                <td className="border-t border-b border-gray-300 p-4 mx-2">{invoiceLink.registrationDate ? new Date(invoiceLink.registrationDate).toLocaleDateString() : 'N/A'}</td>
+                <td className="border-t border-b border-gray-300 p-4 mx-2">{invoiceLink.expirationDate ? new Date(invoiceLink.expirationDate).toLocaleDateString() : 'N/A'}</td>
+                <td className="border-t border-b border-gray-300 p-4 mx-2">{invoiceLink.total.toFixed(2)}</td>
+                <td className="border-t border-b border-gray-300 p-4 mx-2">{invoiceLink.paymentMethods || 'N/A'}</td>
+                <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === filterAndSortFacturas(facturas).length - 1 ? 'rounded-br-lg' : ''}`}>
+                  <select
+                    value={invoiceLink.state}
+                    onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
+                    className={`text-white font-semibold p-1 rounded ${invoiceLink.state === 'paid' ? 'text-green-600' : 'text-red-700'}`}
+                  >
+                    <option value="pending">Pendiente</option>
+                    <option className='text-green-700' value="paid">Pago</option>
+                    <option value="overdue">Vencido</option>
+                  </select>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
 
       {error && <p className="text-red-500 m-4">{error}</p>}
-
-      <button
-        onClick={generarFacturas}
-        className="fixed bottom-4 right-4 bg-gray-900 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-      >
-        Generar Facturas
-      </button>
     </div>
   );
 };

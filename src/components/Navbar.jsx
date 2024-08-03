@@ -13,22 +13,22 @@ const Navbar = ({ onSearch }) => {
   };
 
   return (
-    <nav className="m-2 p-4">
+    <nav className=" p-6">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-gray-800  text-xl">Listado de clientes</div>
+        <div className="text-gray-800 font-semibold text-xl">Listado de clientes</div>
         <div className="flex space-x-4 items-center">
           <input
             type="text"
-            placeholder="Busca clientes"
+            placeholder="Buscar por nombre de cliente"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-8 py-2 border rounded"
+            className="px-20 py-2 border-gray-300 border rounded"
           />
           <button
             onClick={handleSearch}
-            className="text-white hover:text-gray-300"
+            className="text-gray-500 hover:text-gray-300"
           >
-            Search
+            Buscar
           </button>
         </div>
       </div>

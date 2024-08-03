@@ -24,7 +24,7 @@ const Sidebar = () => {
         <div className="flex justify-between items-center p-4 mb-4">
           <img src={logo} alt="Logo" className={`${isSidebarOpen ? 'w-18 h-10 mr-2' : 'hidden'}`}/> {/* Ajusta el tamaño del logo según tus necesidades */}
           <button
-            className="bg-gray-800 text-white hover:bg-gray-700 p-2 rounded focus:outline-none"
+            className=" text-white hover:bg-gray-700 p-2 rounded focus:outline-none"
             onClick={handleSidebarToggle}
           >
             <FontAwesomeIcon icon={isSidebarOpen ? faBars : faBars} />
@@ -45,7 +45,7 @@ const Sidebar = () => {
               </Link> 
             </li>
             <li className="border-b border-gray-700">
-              <Link to="/transactions" className="block text-white hover:bg-gray-700 p-4 transition-colors duration-300">
+              <Link to="/factura-nueva" className="block text-white hover:bg-gray-700 p-4 transition-colors duration-300">
                 Lista de Transacciones
               </Link>
             </li>

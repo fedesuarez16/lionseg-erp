@@ -105,7 +105,7 @@
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Phone Number:</label>
+              <label className="block text-sm font-medium text-gray-700">Telefono:</label>
               <input
                 type="text"
                 name="phoneNumber"
@@ -128,6 +128,10 @@
                   >
                     <option value="monitoreo">Monitoreo</option>
                     <option value="kit DVR">Kit DVR</option>
+                    <option value="kit DVR">Instalacion</option>
+                    <option value="kit DVR">Alarma</option>
+                    <option value="kit DVR">Otro</option>
+
                   </select>
                   <label className="block text-sm font-medium text-gray-700">Monto del primer pago:</label>
                   <input
@@ -171,20 +175,14 @@
                   />
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={addService}
-                className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                Add Service
-              </button>
+           
             </div>
             <div className="md:col-span-2">
               <button
                 type="submit"
                 className="w-full py-2 px-4 bg-gray-800 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                Add Client
+                Agregar cliente
               </button>
             </div>
           </form>
