@@ -66,26 +66,26 @@ const ClientList = () => {
       </button>
 
       {isAddClientVisible && <AddClient onClientAdded={handleClientAdded} />}
-      <table className="min-w-full bg-white rounded border border-collapse border-gray-800">
+      <table className="min-w-full bg-white rounded border border-collapse border-gray-400">
         <thead>
           <tr className="">
-            <th className="border-t border-b border-gray-800 p-4 rounded">Name</th>
-            <th className="border-t border-b border-gray-800 p-4 rounded">Email</th>
-            <th className="border-t border-b border-gray-800 p-4 rounded">Phone Number</th>
-            <th className="border-t border-b border-gray-800 p-4 rounded">Creation Date</th>
-            <th className="border-t border-b border-gray-800 p-4 rounded">State</th>
+            <th className="border-t border-b border-gray-400 p-4 rounded">Name</th>
+            <th className="border-t border-b border-gray-400 p-4 rounded">Email</th>
+            <th className="border-t border-b border-gray-400 p-4 rounded">Phone Number</th>
+            <th className="border-t border-b border-gray-400 p-4 rounded">Creation Date</th>
+            <th className="border-t border-b border-gray-400 p-4 rounded">State</th>
           </tr>
         </thead>
         <tbody>
           {clients.map((client) => (
             <tr key={client._id}>
-              <td className="border-t border-b border-gray-800 p-4 rounded-bl">
+              <td className="border-t border-b border-gray-400 p-4 rounded-bl">
                 <Link to={`/clients/${client._id}`}>{client.name}</Link>
               </td>
-              <td className="border-t border-b border-gray-800 p-4">{client.email}</td>
-              <td className="border-t border-b border-gray-800 p-4">{client.phoneNumber}</td>
-              <td className="border-t border-b border-gray-800 p-4">{new Date(client.creationDate).toLocaleDateString()}</td>
-              <td className="border-t border-b border-gray-800 p-4">
+              <td className="border-t border-b border-gray-400 p-4">{client.email}</td>
+              <td className="border-t border-b border-gray-400 p-4">{client.phoneNumber}</td>
+              <td className="border-t border-b border-gray-400 p-4">{new Date(client.creationDate).toLocaleDateString()}</td>
+              <td className="border-t border-b border-gray-400 p-4">
                 <select
                   value={client.state}
                   onChange={(e) => handleStateChange(client._id, e.target.value)}
