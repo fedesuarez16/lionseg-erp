@@ -315,19 +315,19 @@ const ClientProfile = () => {
 
           <button
             onClick={handleEditToggle}
-            className="fixed bottom-4 right-4 text-black bg-gray-100 border border-gray-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+            className="fixed bottom-4 right-4 text-white bg-gray-400 border border-gray-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
           >
             <FontAwesomeIcon icon={faEdit} />
           </button>
           <button
             onClick={handleDeleteClient}
-            className="fixed bottom-4 right-24  text-black bg-gray-100 border border-gray-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+            className="fixed bottom-4 right-24  text-white bg-gray-400 border border-gray-400 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
           >
             <FontAwesomeIcon icon={faTrash} />
           </button>
           <button
             onClick={handleCreateInvoice}
-            className="fixed bottom-4 right-44 text-black bg-gray-100 border border-gray-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+            className="fixed bottom-4 right-44 text-white bg-gray-400 border border-gray-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
           >
             <FontAwesomeIcon icon={faFileInvoiceDollar} />
           </button>
