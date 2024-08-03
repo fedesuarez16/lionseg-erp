@@ -84,7 +84,7 @@ const ClientList = () => {
                 <div className="font-bold">{client.companyName}</div>
                 <div className="text-gray-500">{client.contactName}</div>
               </td>
-              <td className="border p-2">{`$${client.amount.toFixed(2)}`}</td>
+              <td className="border p-2">{client.amount ? `$${client.amount.toFixed(2)}` : 'N/A'}</td>
               <td className="border p-2">
                 <span className={`inline-block px-2 py-1 rounded-full text-white ${client.status === 'Paid' ? 'bg-green-500' : 'bg-yellow-500'}`}>
                   {client.status}
