@@ -19,10 +19,10 @@ const Navbar = ({ onSearch }) => {
         <div className="flex space-x-4 items-center">
           <input
             type="text"
-            placeholder="Search clients"
+            placeholder="Busca clientes"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-2 py-1 border rounded"
+            className="px-8 py-4  border rounded"
           />
           <button
             onClick={handleSearch}
