@@ -57,7 +57,7 @@ const ClientList = () => {
   }
 
   return (
-    <div className="bg-gray-100 p-2 border rounded min-h-screen h-auto relative">
+    <div className="p-2 border rounded-xl min-h-screen h-auto relative">
       <Navbar onSearch={handleSearch} />
       <button
         className="fixed bottom-4 right-6 pb-[14px] bg-gray-800 text-white py-2 px-[18px] rounded-full text-3xl"
@@ -66,9 +66,9 @@ const ClientList = () => {
       </button>
 
       {isAddClientVisible && <AddClient onClientAdded={handleClientAdded} />}
-      <table className="min-w-full bg-white rounded border border-collapse border-gray-400">
+      <table className="min-w-full bg-white  border rounded border-gray-200">
         <thead>
-          <tr className="text-gray-500">
+          <tr className="text-gray-500 m-2">
             <th className="border-t border-b border-gray-400 p-4 rounded mx-2">Name</th>
             <th className="border-t border-b border-gray-400 p-4 rounded mx-2">Email</th>
             <th className="border-t border-b border-gray-400 p-4 rounded mx-2">Phone Number</th>
