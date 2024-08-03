@@ -13,9 +13,9 @@ const Navbar = ({ onSearch }) => {
   };
 
   return (
-    <nav className="bg-gray-900 p-4">
+    <nav className="m-2 p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-white  text-xl">Listado de clientes</div>
+        <div className="text-gray-800  text-xl">Listado de clientes</div>
         <div className="flex space-x-4 items-center">
           <input
             type="text"
