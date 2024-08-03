@@ -57,7 +57,7 @@ const ClientList = () => {
   }
 
   return (
-    <div className="bg-gray-100 p-2 min-h-screen h-auto relative">
+    <div className="bg-gray-100 p-2 border rounded min-h-screen h-auto relative">
       <Navbar onSearch={handleSearch} />
       <button
         className="fixed bottom-4 right-6 pb-[14px] bg-gray-800 text-white py-2 px-[18px] rounded-full text-3xl"
