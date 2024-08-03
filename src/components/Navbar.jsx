@@ -22,7 +22,7 @@ const Navbar = ({ onSearch }) => {
             placeholder="Busca clientes"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-8 py-4  border rounded"
+            className="px-8 py-2 border rounded"
           />
           <button
             onClick={handleSearch}
