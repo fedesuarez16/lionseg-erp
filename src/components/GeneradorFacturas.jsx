@@ -111,7 +111,7 @@ const GeneradorFacturas = () => {
 
       <table className="min-w-full bg-white rounded border border-collapse border-gray-300">
         <thead>
-          <tr className="text-gray-500 m-2">
+          <tr className="text-gray-700 m-2">
             <th className="font-semibold border-t border-b border-gray-300 p-4 rounded-tl-lg mx-2">Invoice Link</th>
             <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Nombre</th>
             <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Fecha de Emisión</th>

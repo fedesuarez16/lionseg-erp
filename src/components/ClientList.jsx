@@ -68,7 +68,7 @@ const ClientList = () => {
       {isAddClientVisible && <AddClient onClientAdded={handleClientAdded} />}
       <table className="min-w-full  bg-white border rounded-full  border-gray-300">
         <thead>
-          <tr className="text-gray-500 text-light px-4 m-2">
+          <tr className="text-gray-700 text-light px-4 m-2">
             <th className="font-semibold border-t border-b border-gray-300 p-4 rounded-tl-lg mx-2">Nombre</th>
             <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Email</th>
             <th className="border-t border-b font-semibold border-gray-300 p-4 mx-2">Telefono</th>

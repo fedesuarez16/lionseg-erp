@@ -219,7 +219,7 @@ const ClientProfile = () => {
               />
               <button
                 onClick={() => handleRemoveService(index)}
-                className="mt-2 px-4 py-2 bg-red-600 text-white rounded-md"
+                className="mt-2 px-4 py-2 border border-gray-400 text-gray-800 rounded-md"
               >
                 Eliminar Servicio
               </button>
@@ -227,7 +227,7 @@ const ClientProfile = () => {
           ))}
           <button
             onClick={handleAddService}
-            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md"
+            className="mt-4 px-4 py-2 border border-gray-400 text-black rounded-md"
           >
             Añadir Servicio
           </button>
@@ -237,7 +237,7 @@ const ClientProfile = () => {
 
           <button
             onClick={handleFormSubmit}
-            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md"
+            className="mt-4 ml-8 px-4 py-2 border border-gray-400 text-black rounded-md"
           >
             Guardar
           </button>
@@ -261,24 +261,24 @@ const ClientProfile = () => {
 
           <div className="w-full ">
             <h2 className="text-xl  font-semibold py-4">Servicios</h2>
-            <table className="min-w-full border border-collapse border-gray-800">
+            <table className="min-w-full border border-collapse border-gray-300">
               <thead>
                 <tr className=" text-gray-600 ">
-                  <th className="border font-regular p-2">Producto</th>
-                  <th className="border p-2">Precio</th>
-                  <th className="border p-2">Ciclo de facturación</th>
-                  <th className="border p-2">Método de pago</th>
-                  <th className="border p-2">Dominios</th>
+                  <th className="border-b font-regular p-2">Producto</th>
+                  <th className="border-b p-2">Precio</th>
+                  <th className="border-b p-2">Ciclo de facturación</th>
+                  <th className="border-b p-2">Método de pago</th>
+                  <th className="border-b p-2">Dominios</th>
                 </tr>
               </thead>
               <tbody>
                 {client.services.map((service, index) => (
                   <tr key={index}>
-                    <td className="border bg-white p-2">{service.producto}</td>
-                    <td className="border bg-white p-2">{service.price}</td>
-                    <td className="border bg-white p-2">{service.invoiceCycle}</td>
-                    <td className="border bg-white p-2">{service.paymentMethod}</td>
-                    <td className="border bg-white p-2">{service.domains.join(', ')}</td>
+                    <td className="border-b bg-white p-2">{service.producto}</td>
+                    <td className="border-b bg-white p-2">{service.price}</td>
+                    <td className="border-b bg-white p-2">{service.invoiceCycle}</td>
+                    <td className="border-b bg-white p-2">{service.paymentMethod}</td>
+                    <td className="border-b bg-white p-2">{service.domains.join(', ')}</td>
                   </tr>
                 ))}
               </tbody>
@@ -287,26 +287,26 @@ const ClientProfile = () => {
 
           <p className="font-semibold text-lg  py-4 ">Info de facturación</p>
           <div className="w-full mb-4">
-            <table className="min-w-full border border-collapse border-gray-800">
+            <table className="min-w-full border border-collapse border-gray-300">
               <thead>
                 <tr className=" text-gray-600">
-                  <th className="border p-2">Número de factura</th>
-                  <th className="border p-2">Fecha de registro</th>
-                  <th className="border p-2">Fecha de expiración</th>
-                  <th className="border p-2">Estado</th>
+                  <th className="border-b border-gray-300  p-2">Número de factura</th>
+                  <th className="border-b border-gray-300 p-2">Fecha de registro</th>
+                  <th className="border-b p-2">Fecha de expiración</th>
+                  <th className="border-b  p-2">Estado</th>
                 </tr>
               </thead>
               <tbody>
                 {client.invoiceLinks.map((invoiceLink, index) => (
                   <tr key={index}>
-                    <td className="border bg-white p-2">
+                    <td className="border-b bg-white p-2">
                       <a href={`https://lionseg-df2520243ed6.herokuapp.com/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
                         {invoiceLink.fileName}
                       </a>
                     </td>
-                    <td className="border bg-white p-2">{new Date(invoiceLink.registrationDate).toLocaleDateString()}</td>
-                    <td className="border bg-white p-2">{new Date(invoiceLink.expirationDate).toLocaleDateString()}</td>
-                    <td className="border bg-white p-2">{invoiceLink.state}</td>
+                    <td className="border-b bg-white p-2">{new Date(invoiceLink.registrationDate).toLocaleDateString()}</td>
+                    <td className="border-b bg-white p-2">{new Date(invoiceLink.expirationDate).toLocaleDateString()}</td>
+                    <td className="border-b bg-white p-2">{invoiceLink.state}</td>
                   </tr>
                 ))}
               </tbody>

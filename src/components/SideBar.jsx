@@ -61,14 +61,7 @@ const Sidebar = () => {
             </li>
           </ul>
         )}
-        {!isSidebarOpen && (
-          <button
-            className="fixed bottom-20 bg-gray-800 text-white hover:bg-gray-700 p-2 rounded focus:outline-none"
-            onClick={handleSidebarToggle}
-          >
-            <FontAwesomeIcon icon={faChevronRight} />
-          </button>
-        )}
+      
       </div>
       {/* Logout Button */}
       <div className="p-4">
