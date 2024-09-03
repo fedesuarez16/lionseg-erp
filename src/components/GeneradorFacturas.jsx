@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
 import SearchBarInvoice from './SearchBarInvoice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const GeneradorFacturas = () => {
   const [facturas, setFacturas] = useState([]);
@@ -65,6 +67,21 @@ const GeneradorFacturas = () => {
     }
   };
 
+  const deleteInvoice = async (clienteId, invoiceLinkId) => {
+    try {
+      const response = await axios.delete(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clienteId}/invoiceLinks/${invoiceLinkId}`);
+      if (response.status === 200) {
+        fetchFacturas();
+        setError('');
+      } else {
+        setError('Error al eliminar la factura');
+      }
+    } catch (error) {
+      console.error('Error al eliminar la factura:', error);
+      setError('Error al eliminar la factura');
+    }
+  };
+
   const filterAndSortFacturas = (facturas) => {
     const facturasFiltradas = facturas.filter(invoiceLink => {
       if (filter === 'paid') {
@@ -89,7 +106,7 @@ const GeneradorFacturas = () => {
   return (
     <div className="p-2 bg-white border rounded-xl min-h-screen h-auto relative">
       <SearchBarInvoice searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <div className="p-4 mb-6 h-8 ">
+      <div className="p-4 mb-6 h-8">
         <label htmlFor="filter">Filtrar: </label>
         <select
           id="filter"
@@ -118,13 +135,14 @@ const GeneradorFacturas = () => {
             <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Fecha de Expiración</th>
             <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Total</th>
             <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Método de Pago</th>
-            <th className="font-semibold border-t border-b border-gray-300 p-4 rounded-tr-lg mx-2">Estado</th>
+            <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Estado</th>
+            <th className="font-semibold border-t border-b border-gray-300 p-4 rounded-tr-lg mx-2"></th>
           </tr>
         </thead>
         <tbody>
           {filterAndSortFacturas(facturas).length === 0 ? (
             <tr>
-              <td colSpan="7" className="border-t border-b border-gray-300 p-4 mx-2">No hay facturas generadas</td>
+              <td colSpan="8" className="border-t border-b border-gray-300 p-4 mx-2">No hay facturas generadas</td>
             </tr>
           ) : (
             filterAndSortFacturas(facturas).map((invoiceLink, index) => (
@@ -149,6 +167,15 @@ const GeneradorFacturas = () => {
                     <option className='text-green-700' value="paid">Pago</option>
                     <option value="overdue">Vencido</option>
                   </select>
+                </td>
+                <td className="border-t border-b  border-gray-300 p-4 mx-2">
+                  <button
+                    onClick={() => deleteInvoice(invoiceLink.clienteId, invoiceLink._id)}
+                    className="text-slate-500  hover:text-gray-800"
+                  >
+                  <FontAwesomeIcon icon={faTrash} />
+
+                  </button>
                 </td>
               </tr>
             ))
