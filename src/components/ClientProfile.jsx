@@ -297,19 +297,23 @@ const ClientProfile = () => {
                 </tr>
               </thead>
               <tbody>
-                {client.invoiceLinks.map((invoiceLink, index) => (
-                  <tr key={index}>
-                    <td className="border-b bg-white p-2">
-                      <a href={`https://lionseg-df2520243ed6.herokuapp.com/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
-                        {invoiceLink.fileName}
-                      </a>
-                    </td>
-                    <td className="border-b bg-white p-2">{new Date(invoiceLink.registrationDate).toLocaleDateString()}</td>
-                    <td className="border-b bg-white p-2">{new Date(invoiceLink.expirationDate).toLocaleDateString()}</td>
-                    <td className="border-b bg-white p-2">{invoiceLink.state}</td>
-                  </tr>
-                ))}
+                {client.invoiceLinks
+                  .slice()
+                  .reverse() // Invertir el orden de los invoices
+                  .map((invoiceLink, index) => (
+                    <tr key={index}>
+                      <td className="border-b bg-white p-2">
+                        <a href={`https://lionseg-df2520243ed6.herokuapp.com/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
+                          {invoiceLink.fileName}
+                        </a>
+                      </td>
+                      <td className="border-b bg-white p-2">{new Date(invoiceLink.registrationDate).toLocaleDateString()}</td>
+                      <td className="border-b bg-white p-2">{new Date(invoiceLink.expirationDate).toLocaleDateString()}</td>
+                      <td className="border-b bg-white p-2">{invoiceLink.state}</td>
+                    </tr>
+                  ))}
               </tbody>
+
             </table>
           </div>
 
