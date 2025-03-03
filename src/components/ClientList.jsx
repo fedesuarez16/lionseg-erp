@@ -37,10 +37,6 @@ const ClientList = () => {
     setIsAddClientVisible(false);
   };
 
-  const handleSearch = (searchQuery) => {
-    console.log('Search Query:', searchQuery);
-  };
-
   const handleStateChange = async (clientId, newState) => {
     try {
       const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`, { state: newState });
@@ -52,13 +48,24 @@ const ClientList = () => {
     }
   };
 
+  // Función para generar el enlace de WhatsApp
+  const handleGenerateWhatsAppLink = async (clienteId, invoiceId) => {
+    try {
+      const response = await axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/generar-link-whatsapp/${clienteId}/${invoiceId}`);
+      const whatsappLink = response.data.link;
+      window.open(whatsappLink, '_blank'); // Abre el enlace en una nueva pestaña
+    } catch (error) {
+      console.error('Error generating WhatsApp link:', error);
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="p-2 bg-white border  min-h-screen h-auto relative">
-      <Navbar onSearch={handleSearch} />
+    <div className="p-2 bg-white border min-h-screen h-auto relative">
+      <Navbar onSearch={fetchClients} />
       <button
         className="fixed bottom-4 right-6 pb-[14px] bg-gray-800 text-white py-2 px-[18px] rounded-full text-3xl"
         onClick={handleAddClientToggle}
@@ -66,26 +73,28 @@ const ClientList = () => {
       </button>
 
       {isAddClientVisible && <AddClient onClientAdded={handleClientAdded} />}
-      <table className="min-w-full  bg-white border rounded-full  border-gray-300">
+      
+      <table className="min-w-full bg-white border rounded-full border-gray-300">
         <thead>
           <tr className="text-gray-700 text-light px-4 m-2">
             <th className="font-semibold border-t border-b border-gray-300 p-4 rounded-tl-lg mx-2">Nombre</th>
             <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Email</th>
-            <th className="border-t border-b font-semibold border-gray-300 p-4 mx-2">Telefono</th>
+            <th className="border-t border-b font-semibold border-gray-300 p-4 mx-2">Teléfono</th>
             <th className="border-t border-b border-gray-300 font-semibold p-4 mx-2">Registro</th>
-            <th className="border-t border-b border-gray-300 p-4 rounded-tr- font-semibold lg mx-2">Estado </th>
+            <th className="border-t border-b border-gray-300 font-semibold p-4 mx-2">Estado</th>
+            <th className="border-t border-b border-gray-300 font-semibold p-4 mx-2">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {clients.map((client, index) => (
             <tr className='text-gray-600' key={client._id}>
-              <td className={`border-t border-b border-gray-300  p-4 mx-2 ${index === clients.length - 1 ? 'rounded-bl-lg' : ''}`}>
+              <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === clients.length - 1 ? 'rounded-bl-lg' : ''}`}>
                 <Link to={`/clients/${client._id}`}>{client.name}</Link>
               </td>
               <td className="border-t border-b border-gray-300 p-4 mx-2">{client.email}</td>
               <td className="border-t border-b border-gray-300 p-4 mx-2">{client.phoneNumber}</td>
               <td className="border-t border-b border-gray-300 p-4 mx-2">{new Date(client.creationDate).toLocaleDateString()}</td>
-              <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === clients.length - 1 ? 'rounded-br-lg' : ''}`}>
+              <td className="border-t border-b border-gray-300 p-4 mx-2">
                 <select
                   value={client.state}
                   onChange={(e) => handleStateChange(client._id, e.target.value)}
@@ -94,6 +103,16 @@ const ClientList = () => {
                   <option value="activo">Activo</option>
                   <option value="inactivo">Inactivo</option>
                 </select>
+              </td>
+              <td className="border-t border-b border-gray-300 p-4 mx-2">
+                {/* Botón para generar el enlace de WhatsApp */}
+                <button
+                  className="bg-green-500 text-white px-3 py-1 rounded"
+                  onClick={() => handleGenerateWhatsAppLink(client._id, client.invoiceLinks?.[0]?._id)}
+                  disabled={!client.invoiceLinks?.length}
+                >
+                  WhatsApp
+                </button>
               </td>
             </tr>
           ))}
