@@ -8,13 +8,11 @@ const ClientList = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAddClientVisible, setIsAddClientVisible] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const searchQuery = new URLSearchParams(location.search).get('search') || '';
+  const [generatedLinks, setGeneratedLinks] = useState({}); // Guarda los links generados
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes?search=${searchQuery}`);
+      const response = await axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes`);
       const sortedClients = response.data.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
       setClients(sortedClients);
       setLoading(false);
@@ -26,21 +24,23 @@ const ClientList = () => {
 
   useEffect(() => {
     fetchClients();
-  }, [searchQuery]);
+  }, []);
 
-  const handleAddClientToggle = () => {
-    setIsAddClientVisible(!isAddClientVisible);
+  const handleGenerateLink = async (clientId) => {
+    try {
+      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/generar-link`, { clientId });
+      setGeneratedLinks((prevLinks) => ({
+        ...prevLinks,
+        [clientId]: response.data.link, // Guarda el link generado en el estado
+      }));
+    } catch (error) {
+      console.error('Error generating link:', error);
+    }
   };
 
-  const handleClientAdded = () => {
-    fetchClients();
-    setIsAddClientVisible(false);
-  };
-
-  const handleSearch = (searchQuery) => {
-    console.log('Search Query:', searchQuery);
-  };
-
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   const handleStateChange = async (clientId, newState) => {
     try {
       const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`, { state: newState });
@@ -51,49 +51,64 @@ const ClientList = () => {
       console.error('Error updating client state:', error);
     }
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
+  
   return (
-    <div className="p-2 bg-white border  min-h-screen h-auto relative">
-      <Navbar onSearch={handleSearch} />
+    <div className="p-2 bg-white border min-h-screen h-auto relative">
+      <Navbar />
       <button
-        className="fixed bottom-4 right-6 pb-[14px] bg-gray-800 text-white py-2 px-[18px] rounded-full text-3xl"
-        onClick={handleAddClientToggle}
-      > +
+        className="fixed bottom-4 right-6 bg-gray-800 text-white py-2 px-[18px] rounded-full text-3xl"
+        onClick={() => setIsAddClientVisible(!isAddClientVisible)}
+      >
+        +
       </button>
 
-      {isAddClientVisible && <AddClient onClientAdded={handleClientAdded} />}
-      <table className="min-w-full  bg-white border rounded-full  border-gray-300">
+      {isAddClientVisible && <AddClient onClientAdded={fetchClients} />}
+      
+      <table className="min-w-full bg-white border rounded border-gray-300">
         <thead>
-          <tr className="text-gray-700 text-light px-4 m-2">
-            <th className="font-semibold border-t border-b border-gray-300 p-4 rounded-tl-lg mx-2">Nombre</th>
-            <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Email</th>
-            <th className="border-t border-b font-semibold border-gray-300 p-4 mx-2">Telefono</th>
-            <th className="border-t border-b border-gray-300 font-semibold p-4 mx-2">Registro</th>
-            <th className="border-t border-b border-gray-300 p-4 rounded-tr- font-semibold lg mx-2">Estado </th>
+          <tr className="text-gray-700 px-4">
+            <th className="font-semibold border p-4">Nombre</th>
+            <th className="font-semibold border p-4">Email</th>
+            <th className="font-semibold border p-4">Teléfono</th>
+            <th className="font-semibold border p-4">Registro</th>
+            <th className="font-semibold border p-4">Estado</th>
+            <th className="font-semibold border p-4">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {clients.map((client, index) => (
-            <tr className='text-gray-600' key={client._id}>
-              <td className={`border-t border-b border-gray-300  p-4 mx-2 ${index === clients.length - 1 ? 'rounded-bl-lg' : ''}`}>
-                <Link to={`/clients/${client._id}`}>{client.name}</Link>
-              </td>
-              <td className="border-t border-b border-gray-300 p-4 mx-2">{client.email}</td>
-              <td className="border-t border-b border-gray-300 p-4 mx-2">{client.phoneNumber}</td>
-              <td className="border-t border-b border-gray-300 p-4 mx-2">{new Date(client.creationDate).toLocaleDateString()}</td>
-              <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === clients.length - 1 ? 'rounded-br-lg' : ''}`}>
+          {clients.map((client) => (
+            <tr key={client._id} className="text-gray-600">
+              <td className="border p-4">{client.name}</td>
+              <td className="border p-4">{client.email}</td>
+              <td className="border p-4">{client.phoneNumber}</td>
+              <td className="border p-4">{new Date(client.creationDate).toLocaleDateString()}</td>
+              <td className="border p-4">
                 <select
                   value={client.state}
                   onChange={(e) => handleStateChange(client._id, e.target.value)}
-                  className={`text-white font-semibold p-1 rounded ${client.state === 'activo' ? 'text-green-800' : 'text-red-700'}`}
+                  className={`p-1 rounded ${client.state === 'activo' ? 'text-green-800' : 'text-red-700'}`}
                 >
                   <option value="activo">Activo</option>
                   <option value="inactivo">Inactivo</option>
                 </select>
+              </td>
+              <td className="border p-4">
+                <button
+                  onClick={() => handleGenerateLink(client._id)}
+                  className="bg-blue-600 text-white px-3 py-1 rounded"
+                >
+                  Generar Link
+                </button>
+                {generatedLinks[client._id] && (
+                  <a
+                    href={generatedLinks[client._id]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ml-2 text-blue-600 underline"
+                  >
+                    Ver Link
+                  </a>
+                )}
               </td>
             </tr>
           ))}
