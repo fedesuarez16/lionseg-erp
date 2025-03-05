@@ -100,8 +100,12 @@ const ClientList = () => {
       console.log('Link de la factura:', facturaLink);
   
       // Mensaje de WhatsApp
-      const mensajeWhatsApp = `Hola ${clientName}, aquí está tu factura: https://lionseg-df2520243ed6.herokuapp.com/facturas/${facturaLink}`;
-      const whatsappURL = `https://wa.me/${clientPhone}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+      const mensajeWhatsApp = `Hola ${clientName}, aquí está tu factura: https://lionseg-df2520243ed6.herokuapp.com/facturas/${facturaLink}
+
+      Detalles de la factura:
+      - Servicio: ${servicioDescripcion}
+      - Monto: $${monto}`;
+            const whatsappURL = `https://wa.me/${clientPhone}?text=${encodeURIComponent(mensajeWhatsApp)}`;
   
       // Abrir en una nueva ventana
       window.open(whatsappURL, '_blank');
@@ -138,7 +142,7 @@ const ClientList = () => {
 
         <tbody>
           {clients.map((client, index) => (
-            <tr className='text-gray-600' key={client._id}>
+            <tr className='text-gray-600 ' key={client._id}>
               <td className={`border-t border-b border-gray-300  p-4 mx-2 ${index === clients.length - 1 ? 'rounded-bl-lg' : ''}`}>
                 <Link to={`/clients/${client._id}`}>{client.name}</Link>
               </td>
