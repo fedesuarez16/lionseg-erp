@@ -55,7 +55,65 @@ const ClientList = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
+ 
+ 
+ 
+  const generarFactura = async (clientId) => {
+    try {
+      // Obtener los detalles del cliente
+      const clientResponse = await axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`);
+      const clientData = clientResponse.data;
+  
+      console.log('Datos completos del cliente:', clientData); 
+      console.log('Servicios del cliente:', clientData.services); 
+  
+      // Extraer datos del cliente
+      const clientPhone = clientData.phoneNumber;
+      const clientName = clientData.name;
+  
+      // Validar si hay servicios y obtener precio y producto
+      if (!clientData.services.length) {
+        alert('El cliente no tiene servicios registrados.');
+        return;
+      }
+  
+      const monto = clientData.services[0].price || 0;
+      const servicioDescripcion = clientData.services[0].producto || "Servicio contratado";
+  
+      console.log('Monto:', monto); 
+      console.log('Servicio:', servicioDescripcion); 
+  
+      // Generar la factura con los datos corregidos
+      const facturaResponse = await axios.post(
+        `https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`,
+        {
+          monto: monto,
+          fechaVencimiento: new Date().toISOString().split('T')[0],
+          descripcion: servicioDescripcion,
+        }
+      );
+  
+      console.log('Respuesta de la API al generar factura:', facturaResponse.data); 
+  
+      // Obtener el enlace de la factura generada
+      const facturaLink = facturaResponse.data.factura.fileName;
+      console.log('Link de la factura:', facturaLink);
+  
+      // Mensaje de WhatsApp
+      const mensajeWhatsApp = `Hola ${clientName}, aquí está tu factura: https://lionseg-df2520243ed6.herokuapp.com/facturas/${facturaLink}`;
+      const whatsappURL = `https://wa.me/${clientPhone}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+  
+      // Abrir en una nueva ventana
+      window.open(whatsappURL, '_blank');
+  
+      alert('Factura generada con éxito y enviada a WhatsApp');
+  
+    } catch (error) {
+      console.error('Error generando la factura o enviando a WhatsApp:', error);
+      alert('Error al generar la factura');
+    }
+  };
+  
   return (
     <div className="p-2 bg-white border  min-h-screen h-auto relative">
       <Navbar onSearch={handleSearch} />
@@ -67,15 +125,17 @@ const ClientList = () => {
 
       {isAddClientVisible && <AddClient onClientAdded={handleClientAdded} />}
       <table className="min-w-full  bg-white border rounded-full  border-gray-300">
-        <thead>
-          <tr className="text-gray-700 text-light px-4 m-2">
-            <th className="font-semibold border-t border-b border-gray-300 p-4 rounded-tl-lg mx-2">Nombre</th>
-            <th className="font-semibold border-t border-b border-gray-300 p-4 mx-2">Email</th>
-            <th className="border-t border-b font-semibold border-gray-300 p-4 mx-2">Telefono</th>
-            <th className="border-t border-b border-gray-300 font-semibold p-4 mx-2">Registro</th>
-            <th className="border-t border-b border-gray-300 p-4 rounded-tr- font-semibold lg mx-2">Estado </th>
-          </tr>
-        </thead>
+      <thead>
+  <tr className="text-gray-700 text-sm text-light px-4">
+    <th className="font-semibold border-t border-b border-gray-300 rounded-tl-lg px-2 text-left">Nombre</th>
+    <th className="font-semibold border-t border-b border-gray-300 px-2 p-1 text-left">Email</th>
+    <th className="font-semibold border-t border-b border-gray-300 px-2 p-1 text-left">Teléfono</th>
+    <th className="font-semibold border-t border-b border-gray-300 px-2 p-1 text-left">Registro</th>
+    <th className="font-semibold border-t border-b border-gray-300 px-2 p-1 text-left">Estado</th>
+    <th className="font-semibold border-t border-b border-gray-300 px-2 p-1 text-left">Acciones</th>
+  </tr>
+</thead>
+
         <tbody>
           {clients.map((client, index) => (
             <tr className='text-gray-600' key={client._id}>
@@ -83,7 +143,7 @@ const ClientList = () => {
                 <Link to={`/clients/${client._id}`}>{client.name}</Link>
               </td>
               <td className="border-t border-b border-gray-300 p-4 mx-2">{client.email}</td>
-              <td className="border-t border-b border-gray-300 p-4 mx-2">{client.phoneNumber}</td>
+              <td className="border-t border-b border-gray-300 p-2 mx-2">{client.phoneNumber}</td>
               <td className="border-t border-b border-gray-300 p-4 mx-2">{new Date(client.creationDate).toLocaleDateString()}</td>
               <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === clients.length - 1 ? 'rounded-br-lg' : ''}`}>
                 <select
@@ -95,6 +155,18 @@ const ClientList = () => {
                   <option value="inactivo">Inactivo</option>
                 </select>
               </td>
+           <td className="border-t border-b border-gray-300 p-4 mx-2">
+                  <button 
+          onClick={() => generarFactura(client._id)} 
+          className=" text-green-700 px-8 py-1 rounded"
+        >
+          Enviar
+        </button>
+
+            </td>
+
+
+
             </tr>
           ))}
         </tbody>
