@@ -100,11 +100,15 @@ const ClientList = () => {
       console.log('Link de la factura:', facturaLink);
   
       // Mensaje de WhatsApp
-      const mensajeWhatsApp = `Hola ${clientName}, aquí está tu factura: https://lionseg-df2520243ed6.herokuapp.com/facturas/${facturaLink}
+      const mensajeWhatsApp = `Hola ${clientName}, Te enviamos la factura correspondiente al mes actual: https://lionseg-df2520243ed6.herokuapp.com/facturas/${facturaLink}
 
-      Detalles de la factura:
+      *Detalles de la factura:*
       - Servicio: ${servicioDescripcion}
-      - Monto: $${monto}`;
+      - Monto: $${monto}
+
+      Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir a la cuenta de tu preferencia debes enviar el comprobante a este numero`;
+
+      
             const whatsappURL = `https://wa.me/${clientPhone}?text=${encodeURIComponent(mensajeWhatsApp)}`;
   
       // Abrir en una nueva ventana
