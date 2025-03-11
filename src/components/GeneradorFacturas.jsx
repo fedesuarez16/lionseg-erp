@@ -50,13 +50,17 @@ const GeneradorFacturas = () => {
     }
   };
 
+  const [refresh, setRefresh] = useState(false);
+
   const updateInvoiceLinkState = async (clienteId, invoiceLinkId, newState) => {
     try {
       const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clienteId}/invoiceLinks/${invoiceLinkId}/state`, {
         state: newState,
       });
+  
       if (response.status === 200) {
         fetchFacturas();
+        setRefresh(prev => !prev); // Esto forzará una re-renderización
         setError('');
       } else {
         setError('Error al actualizar el estado de la factura');
@@ -66,6 +70,7 @@ const GeneradorFacturas = () => {
       setError('Error al actualizar el estado de la factura');
     }
   };
+  
 
   const deleteInvoice = async (clienteId, invoiceLinkId) => {
     try {
@@ -101,7 +106,7 @@ const GeneradorFacturas = () => {
 
   useEffect(() => {
     fetchFacturas();
-  }, []);
+  }, [refresh]);
 
   return (
     <div className="p-2 bg-white border rounded-xl min-h-screen h-auto relative">
