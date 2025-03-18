@@ -39,7 +39,13 @@ const GeneradorFacturas = () => {
             paymentMethods: cliente.services.map(service => service.paymentMethod).filter(Boolean).join(', '),
           }))
         );
-        setFacturas(facturasAplanadas);
+  
+        // Ordenar por fecha descendente (suponiendo que invoiceLink tiene una propiedad 'date')
+        const facturasOrdenadas = facturasAplanadas
+          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .slice(0, 300); // Tomar solo las últimas 300
+  
+        setFacturas(facturasOrdenadas);
         setError('');
       } else {
         setError('Error al obtener las facturas');
@@ -49,6 +55,7 @@ const GeneradorFacturas = () => {
       setError('Error al obtener las facturas');
     }
   };
+  
 
   const [refresh, setRefresh] = useState(false);
 

@@ -123,7 +123,7 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
     }
   };
   
-  return (
+  return ( 
     <div className="p-2 bg-white border  min-h-screen h-auto relative">
       <Navbar onSearch={handleSearch} />
       <button
