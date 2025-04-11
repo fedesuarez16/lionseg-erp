@@ -160,7 +160,7 @@ const GeneradorFacturas = () => {
             filterAndSortFacturas(facturas).map((invoiceLink, index) => (
               <tr key={invoiceLink._id} className="text-gray-600">
                 <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === filterAndSortFacturas(facturas).length - 1 ? 'rounded-bl-lg' : ''}`}>
-                  <a href={`https://storage.cloud.google.com/lionseg25/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
+                  <a href={`https://storage.cloud.google.com/lionseg2/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
                     {invoiceLink.fileName}
                   </a>
                 </td>
