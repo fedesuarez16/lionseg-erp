@@ -102,7 +102,7 @@ const ClientList = () => {
 // Construir la lista de servicios y montos
 const serviciosLista = clientData.services.map(servicio => `- ${servicio.producto}: $${servicio.price}`).join('\n');
 
-const mensajeWhatsApp = `Hola ${clientName}, Te enviamos la factura correspondiente al mes actual: https://lionseg-df2520243ed6.herokuapp.com/facturas/${facturaLink}
+const mensajeWhatsApp = `Hola ${clientName}, Te enviamos la factura correspondiente al mes actual: https://storage.cloud.google.com/lionseg25/facturas/${facturaLink}
 
 *Detalles de la factura:*
 ${serviciosLista}
