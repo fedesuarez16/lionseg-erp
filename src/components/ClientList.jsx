@@ -110,7 +110,7 @@ ${serviciosLista}
 Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir a la cuenta de tu preferencia debes enviar el comprobante a este numero`;
 
       
-            const whatsappURL = `https://wa.me/${clientPhone}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+      const whatsappURL = `https://wa.me/${clientPhone}?text=${encodeURIComponent(mensajeWhatsApp)}`;
   
       // Abrir en una nueva ventana
       window.open(whatsappURL, '_blank');

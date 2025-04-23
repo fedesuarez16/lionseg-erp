@@ -35,14 +35,14 @@ const GeneradorFacturas = () => {
             ...invoiceLink,
             clienteId: cliente._id,
             clienteName: cliente.name,
-            total: cliente.services.reduce((acc, service) => acc + (service.price || 0), 0),
+            total: invoiceLink.total || cliente.services.reduce((acc, service) => acc + (service.price || 0), 0),
             paymentMethods: cliente.services.map(service => service.paymentMethod).filter(Boolean).join(', '),
           }))
         );
   
-        // Ordenar por fecha descendente (suponiendo que invoiceLink tiene una propiedad 'date')
+        // Ordenar por fecha de registro descendente
         const facturasOrdenadas = facturasAplanadas
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
+          .sort((a, b) => new Date(b.registrationDate || 0) - new Date(a.registrationDate || 0))
           .slice(0, 300); // Tomar solo las últimas 300
   
         setFacturas(facturasOrdenadas);
