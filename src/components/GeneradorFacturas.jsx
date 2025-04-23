@@ -154,30 +154,25 @@ const GeneradorFacturas = () => {
     </tr>
   ));
 
-  // Helper para mostrar estado con badge
-  const renderStateBadge = (state) => {
-    let badgeClass = '';
-    let stateText = '';
-    
+  // Helper para obtener la clase CSS y texto basado en el estado
+  const getStateStyles = (state) => {
     switch(state) {
       case 'paid':
-        badgeClass = 'bg-green-100 text-green-800 border-green-300';
-        stateText = 'Pagado';
-        break;
+        return {
+          className: 'bg-green-100 text-green-800 border-green-300 hover:bg-green-200',
+          text: 'Pagado'
+        };
       case 'overdue':
-        badgeClass = 'bg-red-100 text-red-800 border-red-300';
-        stateText = 'Vencido';
-        break;
+        return {
+          className: 'bg-red-100 text-red-800 border-red-300 hover:bg-red-200',
+          text: 'Vencido'
+        };
       default:
-        badgeClass = 'bg-yellow-100 text-yellow-800 border-yellow-300';
-        stateText = 'Pendiente';
+        return {
+          className: 'bg-yellow-100 text-yellow-800 border-yellow-300 hover:bg-yellow-200',
+          text: 'Pendiente'
+        };
     }
-    
-    return (
-      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${badgeClass} border`}>
-        {stateText}
-      </span>
-    );
   };
 
   return (
@@ -282,18 +277,22 @@ const GeneradorFacturas = () => {
                       <span className="truncate" title={invoiceLink.paymentMethods}>{invoiceLink.paymentMethods || 'N/A'}</span>
                     </td>
                     <td className="px-3 py-3 text-xs whitespace-nowrap">
-                      <div className="flex items-center">
-                        {renderStateBadge(invoiceLink.state)}
-                        <select
-                          value={invoiceLink.state}
-                          onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
-                          className="ml-1 text-xs border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                        >
-                          <option value="pending">Pendiente</option>
-                          <option value="paid">Pagado</option>
-                          <option value="overdue">Vencido</option>
-                        </select>
-                      </div>
+                      <select
+                        value={invoiceLink.state}
+                        onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
+                        className={`${getStateStyles(invoiceLink.state).className} inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border cursor-pointer appearance-none focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-500 transition-colors duration-200 pr-6`}
+                        style={{ 
+                          backgroundImage: "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\")",
+                          backgroundPosition: "right 0.25rem center",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "1rem 1rem",
+                          paddingRight: "1.5rem"
+                        }}
+                      >
+                        <option value="pending" className="bg-white text-gray-900">Pendiente</option>
+                        <option value="paid" className="bg-white text-gray-900">Pagado</option>
+                        <option value="overdue" className="bg-white text-gray-900">Vencido</option>
+                      </select>
                     </td>
                     <td className="px-3 py-3 text-xs whitespace-nowrap text-right font-medium">
                       <button

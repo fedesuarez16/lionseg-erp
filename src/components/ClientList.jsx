@@ -4,7 +4,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import AddClient from './AddClient';
 import Navbar from './Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faUser, faEnvelope, faPhone, faCalendar, faFileInvoice, faWhatsapp } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faUser, faEnvelope, faPhone, faCalendar, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 const ClientList = () => {
   const [clients, setClients] = useState([]);
@@ -69,7 +70,14 @@ const ClientList = () => {
       </span>
     );
   };
- 
+
+  // Función para obtener las clases de estilo según el estado
+  const getStateStyles = (state) => {
+    return state === 'activo' 
+      ? 'bg-green-100 text-green-800 border-green-300 hover:bg-green-200' 
+      : 'bg-red-100 text-red-800 border-red-300 hover:bg-red-200';
+  };
+
   const generarFactura = async (clientId) => {
     setProcessingClient(clientId);
     try {
@@ -163,12 +171,36 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
             <table className="w-full divide-y divide-gray-200 table-fixed">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">Nombre</th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">Email</th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">Teléfono</th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Registro</th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Estado</th>
-                  <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">Acciones</th>
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">
+                    <span className="flex items-center">
+                      <FontAwesomeIcon icon={faUser} className="text-gray-400 mr-1" />
+                      Nombre
+                    </span>
+                  </th>
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">
+                    <span className="flex items-center">
+                      <FontAwesomeIcon icon={faEnvelope} className="text-gray-400 mr-1" />
+                      Email
+                    </span>
+                  </th>
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
+                    <span className="flex items-center">
+                      <FontAwesomeIcon icon={faPhone} className="text-gray-400 mr-1" />
+                      Teléfono
+                    </span>
+                  </th>
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">
+                    <span className="flex items-center">
+                      <FontAwesomeIcon icon={faCalendar} className="text-gray-400 mr-1" />
+                      Registro
+                    </span>
+                  </th>
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[14%]">
+                    Estado
+                  </th>
+                  <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -185,34 +217,34 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
             <table className="w-full divide-y divide-gray-200 table-fixed">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faUser} className="text-gray-400 mr-1" />
                       Nombre
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faEnvelope} className="text-gray-400 mr-1" />
                       Email
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faPhone} className="text-gray-400 mr-1" />
                       Teléfono
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faCalendar} className="text-gray-400 mr-1" />
                       Registro
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[14%]">
                     Estado
                   </th>
-                  <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
+                  <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
                     Acciones
                   </th>
                 </tr>
@@ -220,16 +252,19 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
               <tbody className="bg-white divide-y divide-gray-200">
                 {clients.map((client) => (
                   <tr key={client._id} className="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
-                    <td className="px-3 py-3 text-sm whitespace-nowrap">
+                    <td className="px-3 py-3 text-sm whitespace-nowrap truncate max-w-[180px]">
                       <Link 
                         to={`/clients/${client._id}`}
-                        className="text-indigo-600 hover:text-indigo-900 font-medium"
+                        className="text-indigo-600 hover:text-indigo-900 font-medium truncate block"
+                        title={client.name}
                       >
                         {client.name}
                       </Link>
                     </td>
-                    <td className="px-3 py-3 text-sm whitespace-nowrap truncate">
-                      <span className="text-gray-600" title={client.email}>{client.email}</span>
+                    <td className="px-3 py-3 text-sm whitespace-nowrap truncate max-w-[180px]">
+                      <span className="text-gray-600 truncate block" title={client.email}>
+                        {client.email}
+                      </span>
                     </td>
                     <td className="px-3 py-3 text-sm whitespace-nowrap">
                       <span className="text-gray-600">{client.phoneNumber}</span>
@@ -238,17 +273,21 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
                       <span className="text-gray-600">{new Date(client.creationDate).toLocaleDateString()}</span>
                     </td>
                     <td className="px-3 py-3 text-sm whitespace-nowrap">
-                      <div className="flex items-center">
-                        {renderStateBadge(client.state)}
-                        <select
-                          value={client.state}
-                          onChange={(e) => handleStateChange(client._id, e.target.value)}
-                          className="ml-2 text-xs border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                        >
-                          <option value="activo">Activo</option>
-                          <option value="inactivo">Inactivo</option>
-                        </select>
-                      </div>
+                      <select
+                        value={client.state}
+                        onChange={(e) => handleStateChange(client._id, e.target.value)}
+                        className={`${getStateStyles(client.state)} inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border cursor-pointer appearance-none focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-indigo-500 transition-colors duration-200 pr-6`}
+                        style={{ 
+                          backgroundImage: "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\")",
+                          backgroundPosition: "right 0.25rem center",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "1rem 1rem",
+                          paddingRight: "1.5rem"
+                        }}
+                      >
+                        <option value="activo" className="bg-white text-gray-900">Activo</option>
+                        <option value="inactivo" className="bg-white text-gray-900">Inactivo</option>
+                      </select>
                     </td>
                     <td className="px-3 py-3 text-sm whitespace-nowrap text-center">
                       <button 
