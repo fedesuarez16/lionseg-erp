@@ -10,6 +10,9 @@ const GeneradorFacturas = () => {
   const [error, setError] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'paid', 'unpaid'
   const [searchQuery, setSearchQuery] = useState('');
+  const [visibleFacturas, setVisibleFacturas] = useState(50); // Número de facturas visibles inicialmente
+  const [isLoading, setIsLoading] = useState(false);
+  const [allFacturasLoaded, setAllFacturasLoaded] = useState(false);
 
   const generarFacturas = async () => {
     try {
@@ -27,6 +30,7 @@ const GeneradorFacturas = () => {
   };
 
   const fetchFacturas = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/clientes');
       if (response.status === 200) {
@@ -42,10 +46,12 @@ const GeneradorFacturas = () => {
   
         // Ordenar por fecha de registro descendente
         const facturasOrdenadas = facturasAplanadas
-          .sort((a, b) => new Date(b.registrationDate || 0) - new Date(a.registrationDate || 0))
-          .slice(0, 300); // Tomar solo las últimas 300
+          .sort((a, b) => new Date(b.registrationDate || 0) - new Date(a.registrationDate || 0));
   
         setFacturas(facturasOrdenadas);
+        // Resetear la paginación al cargar nuevas facturas
+        setVisibleFacturas(50);
+        setAllFacturasLoaded(facturasOrdenadas.length <= 50);
         setError('');
       } else {
         setError('Error al obtener las facturas');
@@ -53,9 +59,22 @@ const GeneradorFacturas = () => {
     } catch (error) {
       console.error('Error al obtener las facturas:', error);
       setError('Error al obtener las facturas');
+    } finally {
+      setIsLoading(false);
     }
   };
   
+  const loadMoreFacturas = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setVisibleFacturas(prev => {
+        const newValue = prev + 50;
+        setAllFacturasLoaded(newValue >= filterAndSortFacturas(facturas).length);
+        return newValue;
+      });
+      setIsLoading(false);
+    }, 500); // Pequeño retraso para mostrar el spinner
+  };
 
   const [refresh, setRefresh] = useState(false);
 
@@ -115,6 +134,13 @@ const GeneradorFacturas = () => {
     fetchFacturas();
   }, [refresh]);
 
+  // Cuando cambia el filtro o la búsqueda, revisar si todas las facturas están cargadas
+  useEffect(() => {
+    setAllFacturasLoaded(visibleFacturas >= filterAndSortFacturas(facturas).length);
+  }, [filter, searchQuery, facturas, visibleFacturas]);
+
+  const facturasToShow = filterAndSortFacturas(facturas).slice(0, visibleFacturas);
+
   return (
     <div className="p-2 bg-white border rounded-xl min-h-screen h-auto relative">
       <SearchBarInvoice searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -152,14 +178,14 @@ const GeneradorFacturas = () => {
           </tr>
         </thead>
         <tbody>
-          {filterAndSortFacturas(facturas).length === 0 ? (
+          {facturasToShow.length === 0 ? (
             <tr>
               <td colSpan="8" className="border-t border-b border-gray-300 p-4 mx-2">No hay facturas generadas</td>
             </tr>
           ) : (
-            filterAndSortFacturas(facturas).map((invoiceLink, index) => (
+            facturasToShow.map((invoiceLink, index) => (
               <tr key={invoiceLink._id} className="text-gray-600">
-                <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === filterAndSortFacturas(facturas).length - 1 ? 'rounded-bl-lg' : ''}`}>
+                <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === facturasToShow.length - 1 && allFacturasLoaded ? 'rounded-bl-lg' : ''}`}>
                   <a href={`https://storage.cloud.google.com/lionseg2/facturas/${invoiceLink.fileName}`} target="_blank" rel="noopener noreferrer">
                     {invoiceLink.fileName}
                   </a>
@@ -169,7 +195,7 @@ const GeneradorFacturas = () => {
                 <td className="border-t border-b border-gray-300 p-4 mx-2">{invoiceLink.expirationDate ? new Date(invoiceLink.expirationDate).toLocaleDateString() : 'N/A'}</td>
                 <td className="border-t border-b border-gray-300 p-4 mx-2">{invoiceLink.total.toFixed(2)}</td>
                 <td className="border-t border-b border-gray-300 p-4 mx-2">{invoiceLink.paymentMethods || 'N/A'}</td>
-                <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === filterAndSortFacturas(facturas).length - 1 ? 'rounded-br-lg' : ''}`}>
+                <td className={`border-t border-b border-gray-300 p-4 mx-2 ${index === facturasToShow.length - 1 && allFacturasLoaded ? 'rounded-br-lg' : ''}`}>
                   <select
                     value={invoiceLink.state}
                     onChange={(e) => updateInvoiceLinkState(invoiceLink.clienteId, invoiceLink._id, e.target.value)}
@@ -186,7 +212,6 @@ const GeneradorFacturas = () => {
                     className="text-slate-500  hover:text-gray-800"
                   >
                   <FontAwesomeIcon icon={faTrash} />
-
                   </button>
                 </td>
               </tr>
@@ -194,6 +219,28 @@ const GeneradorFacturas = () => {
           )}
         </tbody>
       </table>
+
+      {!allFacturasLoaded && filterAndSortFacturas(facturas).length > visibleFacturas && (
+        <div className="flex justify-center mt-4 mb-8">
+          <button
+            onClick={loadMoreFacturas}
+            disabled={isLoading}
+            className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow"
+          >
+            {isLoading ? (
+              <span className="flex items-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-800" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Cargando...
+              </span>
+            ) : (
+              'Cargar Más'
+            )}
+          </button>
+        </div>
+      )}
 
       {error && <p className="text-red-500 m-4">{error}</p>}
     </div>
