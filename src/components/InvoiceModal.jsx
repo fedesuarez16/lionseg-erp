@@ -20,7 +20,7 @@ const InvoiceModal = ({ clientId, onClose }) => {
     };
 
     try {
-      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoice`, invoiceData);
+      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoiceIndividual`, invoiceData);
       console.log('Factura creada:', response.data);
       setNotification('Factura creada exitosamente');
       // Limpiar el formulario
