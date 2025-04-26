@@ -101,7 +101,7 @@ const ClientList = () => {
   
       // Generar la factura con los datos corregidos
       const facturaResponse = await axios.post(
-        `https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoice`,
+        `https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`,
         {
           monto: monto,
           fechaVencimiento: new Date().toISOString().split('T')[0],
@@ -110,7 +110,7 @@ const ClientList = () => {
       );
   
       // Obtener el enlace de la factura generada
-      const facturaLink = facturaResponse.data.fileName;
+      const facturaLink = facturaResponse.data.factura.fileName;
   
       // Construir la lista de servicios y montos
       const serviciosLista = clientData.services.map(servicio => `- ${servicio.producto}: $${servicio.price}`).join('\n');

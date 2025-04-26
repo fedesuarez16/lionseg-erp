@@ -251,7 +251,7 @@ const GeneradorFacturas = () => {
                   <tr key={invoiceLink._id} className="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
                     <td className="px-3 py-3 text-xs whitespace-nowrap truncate">
                       <a 
-                        href={`https://storage.cloud.google.com/lionseg2/facturas/${invoiceLink.fileName}`} 
+                        href={`https://storage.googleapis.com/lionseg2/facturas/${invoiceLink.fileName}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-indigo-600 hover:text-indigo-900 font-medium flex items-center"
