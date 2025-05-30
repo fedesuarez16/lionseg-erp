@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import AddClient from './AddClient';
 import Navbar from './Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faUser, faEnvelope, faPhone, faCalendar, faFileInvoice } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faUser, faEnvelope, faPhone, faCalendar, faFileInvoice, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 const ClientList = () => {
@@ -143,7 +143,7 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
   // Generar esqueletos de carga
   const loadingSkeletons = Array(8).fill(0).map((_, index) => (
     <tr key={`skeleton-${index}`} className="animate-pulse">
-      <td colSpan="6" className="border-t border-b border-gray-200 px-4 py-4">
+      <td colSpan="7" className="border-t border-b border-gray-200 px-4 py-4">
         <div className="h-6 bg-gray-200 rounded-md"></div>
       </td>
     </tr>
@@ -171,31 +171,37 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
             <table className="w-full divide-y divide-gray-200 table-fixed">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[18%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faUser} className="text-gray-400 mr-1" />
                       Nombre
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
+                    <span className="flex items-center">
+                      <FontAwesomeIcon icon={faClipboard} className="text-gray-400 mr-1" />
+                      CUIL/CUIT
+                    </span>
+                  </th>
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[18%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faEnvelope} className="text-gray-400 mr-1" />
                       Email
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faPhone} className="text-gray-400 mr-1" />
                       Teléfono
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[10%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faCalendar} className="text-gray-400 mr-1" />
                       Registro
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[14%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">
                     Estado
                   </th>
                   <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
@@ -217,31 +223,37 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
             <table className="w-full divide-y divide-gray-200 table-fixed">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[18%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faUser} className="text-gray-400 mr-1" />
                       Nombre
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[22%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
+                    <span className="flex items-center">
+                      <FontAwesomeIcon icon={faClipboard} className="text-gray-400 mr-1" />
+                      CUIL/CUIT
+                    </span>
+                  </th>
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[18%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faEnvelope} className="text-gray-400 mr-1" />
                       Email
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faPhone} className="text-gray-400 mr-1" />
                       Teléfono
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[10%]">
                     <span className="flex items-center">
                       <FontAwesomeIcon icon={faCalendar} className="text-gray-400 mr-1" />
                       Registro
                     </span>
                   </th>
-                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[14%]">
+                  <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[12%]">
                     Estado
                   </th>
                   <th scope="col" className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-[15%]">
@@ -261,7 +273,12 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
                         {client.name}
                       </Link>
                     </td>
-                    <td className="px-3 py-3 text-sm whitespace-nowrap truncate max-w-[180px]">
+                    <td className="px-3 py-3 text-sm whitespace-nowrap truncate max-w-[150px]">
+                      <span className="text-gray-600 truncate block" title={client.cuilCuit}>
+                        {client.cuilCuit || "-"}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 text-sm whitespace-nowrap truncate max-w-[150px]">
                       <span className="text-gray-600 truncate block" title={client.email}>
                         {client.email}
                       </span>

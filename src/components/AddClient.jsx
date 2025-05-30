@@ -8,6 +8,7 @@ const AddClient = ({ onClientAdded }) => {
     name: '',
     email: '',
     phoneNumber: '',
+    cuilCuit: '',
     services: [
       {
         producto: '',
@@ -92,6 +93,17 @@ const AddClient = ({ onClientAdded }) => {
             onChange={handleChange}
             className="p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             required
+          />
+        </div>
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 mb-1">CUIL/CUIT:</label>
+          <input
+            type="text"
+            name="cuilCuit"
+            value={formData.cuilCuit}
+            onChange={handleChange}
+            className="p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="XX-XXXXXXXX-X"
           />
         </div>
         <div>
@@ -180,6 +192,7 @@ const AddClient = ({ onClientAdded }) => {
                     <option value="trimestral">Trimestral</option>
                     <option value="semestral">Semestral</option>
                     <option value="anual">Anual</option>
+                    <option value="otro">Otro</option>
                   </select>
                 </div>
                 <div>
@@ -194,6 +207,7 @@ const AddClient = ({ onClientAdded }) => {
                     <option value="transferencia">Transferencia Bancaria</option>
                     <option value="mercadopago">Mercado Pago</option>
                     <option value="efectivo">Efectivo</option>
+                    <option value="otro">Otro</option>
                   </select>
                 </div>
                 <div className="md:col-span-2">
