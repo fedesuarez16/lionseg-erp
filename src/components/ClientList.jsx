@@ -81,30 +81,42 @@ const ClientList = () => {
   };
 
   const generarFactura = async (clientId) => {
+    // El listado ya trae name, phoneNumber y services: no hace falta pedir el
+    // cliente de nuevo al servidor. Evitar ese GET saca un viaje completo de
+    // la espera, que es justamente lo que el usuario ve antes de WhatsApp.
+    const clientData = clients.find((c) => c._id === clientId);
+
+    if (!clientData || !clientData.services.length) {
+      alert('El cliente no tiene servicios registrados.');
+      return;
+    }
+
     setProcessingClient(clientId);
 
+    const clientPhone = clientData.phoneNumber;
+    const clientName = clientData.name;
+
     // La pestana se abre ACA, sincronicamente dentro del click. Chrome solo
-    // permite window.open mientras dura el gesto del usuario: despues de los
+    // permite window.open mientras dura el gesto del usuario: despues del
     // await de abajo el permiso ya caduco y el popup se bloquea en silencio.
-    // Se abre vacia y mas adelante se le asigna la URL final.
     const waTab = window.open('', '_blank');
 
+    // Sin esto la pestana queda en blanco y parece rota mientras se genera.
+    if (waTab) {
+      waTab.document.write(
+        '<title>Generando factura...</title>' +
+        '<div style="font-family:system-ui,sans-serif;display:flex;height:90vh;' +
+        'align-items:center;justify-content:center;flex-direction:column;gap:14px;color:#374151">' +
+        '<div style="width:34px;height:34px;border:3px solid #e5e7eb;border-top-color:#4f46e5;' +
+        'border-radius:50%;animation:s .8s linear infinite"></div>' +
+        '<p>Generando la factura de ' + clientName + '...</p>' +
+        '<p style="color:#9ca3af;font-size:14px">Te llevamos a WhatsApp en un momento</p>' +
+        '<style>@keyframes s{to{transform:rotate(360deg)}}</style></div>'
+      );
+      waTab.document.close();
+    }
+
     try {
-      // Obtener los detalles del cliente
-      const clientResponse = await axios.get(`${API_URL}/api/clientes/${clientId}`);
-      const clientData = clientResponse.data;
-  
-      // Extraer datos del cliente
-      const clientPhone = clientData.phoneNumber;
-      const clientName = clientData.name;
-  
-      // Validar si hay servicios y obtener precio y producto
-      if (!clientData.services.length) {
-        if (waTab) waTab.close();
-        alert('El cliente no tiene servicios registrados.');
-        setProcessingClient(null);
-        return;
-      }
   
       const monto = clientData.services[0].price || 0;
       const servicioDescripcion = clientData.services[0].producto || "Servicio contratado";
