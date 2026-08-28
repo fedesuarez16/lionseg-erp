@@ -3,6 +3,8 @@ import axios from 'axios';
 import IncomeNavbar from './IncomeNavbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faCoins, faChartLine, faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { formatFechaCorta } from '../utils/date';
+import { API_URL } from '../api/config';
 
 const TotalIncome = () => {
   const [totalIngresos, setTotalIngresos] = useState(0);
@@ -36,8 +38,8 @@ const TotalIncome = () => {
     setLoading(true);
     try {
       const [totalResponse, ingresosResponse] = await Promise.all([
-        axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/total-ingresos'),
-        axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/ingresos')
+        axios.get(`${API_URL}/api/total-ingresos`),
+        axios.get(`${API_URL}/api/ingresos`)
       ]);
 
       if (totalResponse.status === 200 && ingresosResponse.status === 200) {
@@ -169,7 +171,7 @@ const TotalIncome = () => {
     
     setLoading(true);
     try {
-      const response = await axios.delete('https://lionseg-df2520243ed6.herokuapp.com/api/ingresos');
+      const response = await axios.delete(`${API_URL}/api/ingresos`);
       if (response.status === 200) {
         setIngresos([]);
         setFilteredIngresos([]);
@@ -193,10 +195,7 @@ const TotalIncome = () => {
     return `$${parseFloat(amount).toFixed(2)} ARS`;
   };
 
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('es-AR', options);
-  };
+  const formatDate = (dateString) => formatFechaCorta(dateString);
 
   if (loading && ingresos.length === 0) {
     return (

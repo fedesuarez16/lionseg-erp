@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../api/config';
 
 const NewInvoice = () => {
   const [clients, setClients] = useState([]);
@@ -15,7 +16,7 @@ const NewInvoice = () => {
     // Fetch clients from the server
     const fetchClients = async () => {
       try {
-        const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/clientes');
+        const response = await axios.get(`${API_URL}/api/clientes`);
         setClients(response.data);
       } catch (err) {
         console.error('Error fetching clients:', err);
@@ -31,7 +32,7 @@ const NewInvoice = () => {
     }
 
     try {
-      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${selectedClientId}/generar-factura`, {
+      const response = await axios.post(`${API_URL}/api/clientes/${selectedClientId}/generar-factura`, {
         monto,
         destinatario: selectedClientId,
         fechaFactura,

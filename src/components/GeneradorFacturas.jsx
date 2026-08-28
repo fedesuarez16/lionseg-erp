@@ -4,6 +4,8 @@ import Navbar from './Navbar';
 import SearchBarInvoice from './SearchBarInvoice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faFileInvoice, faPlus, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { formatFecha } from '../utils/date';
+import { API_URL } from '../api/config';
 
 const GeneradorFacturas = () => {
   const [facturas, setFacturas] = useState([]);
@@ -16,7 +18,7 @@ const GeneradorFacturas = () => {
 
   const generarFacturas = async () => {
     try {
-      const response = await axios.post('https://lionseg-df2520243ed6.herokuapp.com/api/generar-facturas');
+      const response = await axios.post(`${API_URL}/api/generar-facturas`);
       if (response.status === 200) {
         fetchFacturas();
         setError('');
@@ -32,7 +34,7 @@ const GeneradorFacturas = () => {
   const fetchFacturas = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/clientes');
+      const response = await axios.get(`${API_URL}/api/clientes`);
       if (response.status === 200) {
         const facturasAplanadas = response.data.flatMap(cliente =>
           cliente.invoiceLinks.map(invoiceLink => ({
@@ -80,7 +82,7 @@ const GeneradorFacturas = () => {
 
   const updateInvoiceLinkState = async (clienteId, invoiceLinkId, newState) => {
     try {
-      const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clienteId}/invoiceLinks/${invoiceLinkId}/state`, {
+      const response = await axios.put(`${API_URL}/api/clientes/${clienteId}/invoiceLinks/${invoiceLinkId}/state`, {
         state: newState,
       });
   
@@ -104,7 +106,7 @@ const GeneradorFacturas = () => {
     }
     
     try {
-      const response = await axios.delete(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clienteId}/invoiceLinks/${invoiceLinkId}`);
+      const response = await axios.delete(`${API_URL}/api/clientes/${clienteId}/invoiceLinks/${invoiceLinkId}`);
       if (response.status === 200) {
         fetchFacturas();
         setError('');
@@ -265,10 +267,10 @@ const GeneradorFacturas = () => {
                       <span className="truncate" title={invoiceLink.clienteName}>{invoiceLink.clienteName}</span>
                     </td>
                     <td className="px-3 py-3 text-xs whitespace-nowrap text-gray-500">
-                      {invoiceLink.registrationDate ? new Date(invoiceLink.registrationDate).toLocaleDateString() : 'N/A'}
+                      {formatFecha(invoiceLink.registrationDate)}
                     </td>
                     <td className="px-3 py-3 text-xs whitespace-nowrap text-gray-500">
-                      {invoiceLink.expirationDate ? new Date(invoiceLink.expirationDate).toLocaleDateString() : 'N/A'}
+                      {formatFecha(invoiceLink.expirationDate)}
                     </td>
                     <td className="px-3 py-3 text-xs whitespace-nowrap font-medium text-gray-900">
                       ${invoiceLink.total.toFixed(2)}

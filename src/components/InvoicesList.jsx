@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
+import { API_URL } from '../api/config';
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState([]);
@@ -8,7 +9,7 @@ const InvoiceList = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('https://lionseg-df2520243ed6.herokuapp.com/api/clientes') 
+    axios.get(`${API_URL}/api/clientes`) 
       .then((response) => {
         const allInvoices = [];
         

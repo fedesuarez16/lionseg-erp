@@ -3,8 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from './Navbar';
 import InvoiceModal from './InvoiceModal';
+import { formatFecha, formatFechaLarga } from '../utils/date';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
+import { API_URL } from '../api/config';
   faEdit, 
   faTrash, 
   faFileInvoiceDollar, 
@@ -46,7 +48,7 @@ const ClientProfile = () => {
 
   const fetchClientData = async () => {
     try {
-      const response = await axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`);
+      const response = await axios.get(`${API_URL}/api/clientes/${clientId}`);
       setClient(response.data);
       setFormData(response.data);
       setLoading(false);
@@ -78,7 +80,7 @@ const ClientProfile = () => {
   
   const handleInvoiceSubmit = async (invoiceData) => {
     try {
-      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`, invoiceData);
+      const response = await axios.post(`${API_URL}/api/clientes/${clientId}/invoices`, invoiceData);
       handleInvoiceCreated(response.data);
       setIsInvoiceModalOpen(false);
     } catch (error) {
@@ -129,7 +131,7 @@ const ClientProfile = () => {
   const handleFormSubmit = async () => {
     try {
       setLoading(true);
-      const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`, formData);
+      const response = await axios.put(`${API_URL}/api/clientes/${clientId}`, formData);
       setClient(response.data);
       setIsEditing(false);
       setLoading(false);
@@ -148,7 +150,7 @@ const ClientProfile = () => {
     
     try {
       setLoading(true);
-      await axios.delete(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`);
+      await axios.delete(`${API_URL}/api/clientes/${clientId}`);
       navigate('/clients');
     } catch (error) {
       console.error('Error deleting client:', error);
@@ -315,7 +317,7 @@ const ClientProfile = () => {
                     {client.state === 'activo' ? 'Activo' : 'Inactivo'}
                   </span>
                   <span className="text-gray-500 text-sm ml-3">
-                    Cliente desde {new Date(client.creationDate).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    Cliente desde {formatFechaLarga(client.creationDate)}
                   </span>
                 </div>
               </div>
@@ -486,7 +488,7 @@ const ClientProfile = () => {
                         <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
                         Fecha de registro
                       </h3>
-                      <p className="text-gray-800">{new Date(client.creationDate).toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                      <p className="text-gray-800">{formatFechaLarga(client.creationDate)}</p>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h3 className="text-sm font-medium text-gray-500 mb-2">
@@ -697,12 +699,12 @@ const ClientProfile = () => {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900">
-                                  {new Date(invoice.registrationDate).toLocaleDateString('es-AR')}
+                                  {formatFecha(invoice.registrationDate)}
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900">
-                                  {new Date(invoice.expirationDate).toLocaleDateString('es-AR')}
+                                  {formatFecha(invoice.expirationDate)}
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">

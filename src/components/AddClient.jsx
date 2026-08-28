@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { API_URL } from '../api/config';
 
 const AddClient = ({ onClientAdded }) => {
   const [formData, setFormData] = useState({
@@ -72,7 +73,7 @@ const AddClient = ({ onClientAdded }) => {
     };
     
     try {
-      const response = await axios.post('https://lionseg-df2520243ed6.herokuapp.com/api/clientes', formattedData);
+      const response = await axios.post(`${API_URL}/api/clientes`, formattedData);
       onClientAdded(); // Notificar a ClientList que un cliente ha sido agregado
     } catch (error) {
       console.error('Error adding client:', error);

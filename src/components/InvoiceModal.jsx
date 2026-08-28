@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { API_URL } from '../api/config';
 
 const InvoiceModal = ({ clientId, onClose }) => {
   const [monto, setMonto] = useState('');
@@ -20,7 +21,7 @@ const InvoiceModal = ({ clientId, onClose }) => {
     };
 
     try {
-      const response = await axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoiceIndividual`, invoiceData);
+      const response = await axios.post(`${API_URL}/api/clientes/${clientId}/invoiceIndividual`, invoiceData);
       console.log('Factura creada:', response.data);
       setNotification('Factura creada exitosamente');
       // Limpiar el formulario

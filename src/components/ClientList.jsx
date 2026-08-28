@@ -6,6 +6,8 @@ import Navbar from './Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faUser, faEnvelope, faPhone, faCalendar, faFileInvoice, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+import { formatFecha } from '../utils/date';
+import { API_URL } from '../api/config';
 
 const ClientList = () => {
   const [clients, setClients] = useState([]);
@@ -18,7 +20,7 @@ const ClientList = () => {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes?search=${searchQuery}`);
+      const response = await axios.get(`${API_URL}/api/clientes?search=${searchQuery}`);
       const sortedClients = response.data.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
       setClients(sortedClients);
       setLoading(false);
@@ -47,7 +49,7 @@ const ClientList = () => {
 
   const handleStateChange = async (clientId, newState) => {
     try {
-      const response = await axios.put(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`, { state: newState });
+      const response = await axios.put(`${API_URL}/api/clientes/${clientId}`, { state: newState });
       if (response.status === 200) {
         setClients(clients.map(client => client._id === clientId ? response.data : client));
       }
@@ -82,7 +84,7 @@ const ClientList = () => {
     setProcessingClient(clientId);
     try {
       // Obtener los detalles del cliente
-      const clientResponse = await axios.get(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}`);
+      const clientResponse = await axios.get(`${API_URL}/api/clientes/${clientId}`);
       const clientData = clientResponse.data;
   
       // Extraer datos del cliente
@@ -101,7 +103,7 @@ const ClientList = () => {
   
       // Generar la factura con los datos corregidos
       const facturaResponse = await axios.post(
-        `https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`,
+        `${API_URL}/api/clientes/${clientId}/invoices`,
         {
           monto: monto,
           fechaVencimiento: new Date().toISOString().split('T')[0],
@@ -287,7 +289,7 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
                       <span className="text-gray-600">{client.phoneNumber}</span>
                     </td>
                     <td className="px-3 py-3 text-sm whitespace-nowrap">
-                      <span className="text-gray-600">{new Date(client.creationDate).toLocaleDateString()}</span>
+                      <span className="text-gray-600">{formatFecha(client.creationDate)}</span>
                     </td>
                     <td className="px-3 py-3 text-sm whitespace-nowrap">
                       <select

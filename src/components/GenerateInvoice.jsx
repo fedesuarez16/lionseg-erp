@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../api/config';
 
 const GenerateInvoice = () => {
   const { clientId } = useParams();
@@ -25,7 +26,7 @@ const GenerateInvoice = () => {
 
   const handleGenerateInvoice = () => {
     // Make a POST request to generate the invoice
-    axios.post(`https://lionseg-df2520243ed6.herokuapp.com/api/clientes/${clientId}/invoices`, formData)
+    axios.post(`${API_URL}/api/clientes/${clientId}/invoices`, formData)
       .then((response) => {
         // Handle the response as needed
         console.log('Invoice generated successfully:', response.data);
