@@ -82,6 +82,13 @@ const ClientList = () => {
 
   const generarFactura = async (clientId) => {
     setProcessingClient(clientId);
+
+    // La pestana se abre ACA, sincronicamente dentro del click. Chrome solo
+    // permite window.open mientras dura el gesto del usuario: despues de los
+    // await de abajo el permiso ya caduco y el popup se bloquea en silencio.
+    // Se abre vacia y mas adelante se le asigna la URL final.
+    const waTab = window.open('', '_blank');
+
     try {
       // Obtener los detalles del cliente
       const clientResponse = await axios.get(`${API_URL}/api/clientes/${clientId}`);
@@ -93,6 +100,7 @@ const ClientList = () => {
   
       // Validar si hay servicios y obtener precio y producto
       if (!clientData.services.length) {
+        if (waTab) waTab.close();
         alert('El cliente no tiene servicios registrados.');
         setProcessingClient(null);
         return;
@@ -125,17 +133,26 @@ ${serviciosLista}
 Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir a la cuenta de tu preferencia debes enviar el comprobante a este numero`;
 
       const whatsappURL = `https://wa.me/${clientPhone}?text=${encodeURIComponent(mensajeWhatsApp)}`;
-  
-      // Abrir en una nueva ventana
-      window.open(whatsappURL, '_blank');
-      
+
       // Actualizar lista de clientes después de generar factura
       fetchClients();
-      
-      alert('Factura generada con éxito y enviada a WhatsApp');
+
+      if (waTab) {
+        waTab.location.href = whatsappURL;
+      } else {
+        // El navegador bloqueo la pestana igual: no perdemos el mensaje,
+        // lo copiamos y damos el link para abrirlo a mano.
+        await navigator.clipboard.writeText(whatsappURL).catch(() => {});
+        alert(
+          'La factura se genero, pero el navegador bloqueo la ventana de WhatsApp.\n\n' +
+          'El link quedo copiado en el portapapeles. Habilita las ventanas emergentes ' +
+          'para este sitio y no vuelve a pasar.'
+        );
+      }
   
     } catch (error) {
       console.error('Error generando la factura o enviando a WhatsApp:', error);
+      if (waTab) waTab.close(); // no dejar una pestana en blanco dando vueltas
       alert('Error al generar la factura');
     } finally {
       setProcessingClient(null);
