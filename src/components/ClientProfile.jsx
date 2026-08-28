@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../api/config';
 import Navbar from './Navbar';
 import InvoiceModal from './InvoiceModal';
 import { formatFecha, formatFechaLarga } from '../utils/date';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
-import { API_URL } from '../api/config';
   faEdit, 
   faTrash, 
   faFileInvoiceDollar, 
