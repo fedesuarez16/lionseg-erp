@@ -96,26 +96,6 @@ const ClientList = () => {
     const clientPhone = clientData.phoneNumber;
     const clientName = clientData.name;
 
-    // La pestana se abre ACA, sincronicamente dentro del click. Chrome solo
-    // permite window.open mientras dura el gesto del usuario: despues del
-    // await de abajo el permiso ya caduco y el popup se bloquea en silencio.
-    const waTab = window.open('', '_blank');
-
-    // Sin esto la pestana queda en blanco y parece rota mientras se genera.
-    if (waTab) {
-      waTab.document.write(
-        '<title>Generando factura...</title>' +
-        '<div style="font-family:system-ui,sans-serif;display:flex;height:90vh;' +
-        'align-items:center;justify-content:center;flex-direction:column;gap:14px;color:#374151">' +
-        '<div style="width:34px;height:34px;border:3px solid #e5e7eb;border-top-color:#4f46e5;' +
-        'border-radius:50%;animation:s .8s linear infinite"></div>' +
-        '<p>Generando la factura de ' + clientName + '...</p>' +
-        '<p style="color:#9ca3af;font-size:14px">Te llevamos a WhatsApp en un momento</p>' +
-        '<style>@keyframes s{to{transform:rotate(360deg)}}</style></div>'
-      );
-      waTab.document.close();
-    }
-
     try {
   
       const monto = clientData.services[0].price || 0;
@@ -146,25 +126,14 @@ Recorda pagar antes de los 7 dias para no recibir recargos. Luego de transferir 
 
       const whatsappURL = `https://wa.me/${clientPhone}?text=${encodeURIComponent(mensajeWhatsApp)}`;
 
-      // Actualizar lista de clientes después de generar factura
-      fetchClients();
-
-      if (waTab) {
-        waTab.location.href = whatsappURL;
-      } else {
-        // El navegador bloqueo la pestana igual: no perdemos el mensaje,
-        // lo copiamos y damos el link para abrirlo a mano.
-        await navigator.clipboard.writeText(whatsappURL).catch(() => {});
-        alert(
-          'La factura se genero, pero el navegador bloqueo la ventana de WhatsApp.\n\n' +
-          'El link quedo copiado en el portapapeles. Habilita las ventanas emergentes ' +
-          'para este sitio y no vuelve a pasar.'
-        );
-      }
+      // Se navega la pestana actual en vez de abrir una nueva: window.location
+      // no depende del gesto del usuario, asi que funciona por mucho que haya
+      // tardado la generacion. El usuario espera en el panel (el boton queda en
+      // "Enviando...") y recien sale hacia WhatsApp con todo listo.
+      window.location.href = whatsappURL;
   
     } catch (error) {
       console.error('Error generando la factura o enviando a WhatsApp:', error);
-      if (waTab) waTab.close(); // no dejar una pestana en blanco dando vueltas
       alert('Error al generar la factura');
     } finally {
       setProcessingClient(null);
