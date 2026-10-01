@@ -171,7 +171,6 @@ const ClientProfile = () => {
       ...client,
       invoiceLinks: [...client.invoiceLinks, newInvoice]
     });
-    setIsInvoiceModalOpen(false);
   };
 
   const getStatusBadgeClass = (status) => {
@@ -734,6 +733,7 @@ const ClientProfile = () => {
       {isInvoiceModalOpen && (
         <InvoiceModal
           clientId={clientId}
+          client={client}
           onClose={() => setIsInvoiceModalOpen(false)}
           onInvoiceCreated={handleInvoiceCreated}
         />
